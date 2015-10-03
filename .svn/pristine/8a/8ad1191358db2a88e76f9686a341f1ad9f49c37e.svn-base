@@ -1,0 +1,37 @@
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-md-4">
+            <div id="first" class="thumbnail">
+            <center>
+                <i class="fa fa-mobile-phone fa-5x"></i>
+                <div class="caption">
+                    <h3>Available in Mobile</h3>
+                    <p>You can now vote your favorite candidate via your mobile phone. This service is only for Android and iPhone as long as you have a browser in your mobile phone.<br/><br/></p>
+                </div>
+                </center>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div id="second" class="thumbnail">
+                <center>
+                <i class="fa fa-lock fa-5x"></i>
+                <div class="caption">
+                    <h3>Secure</h3>
+                    <p>We make sure that your data will be safeguarded with our best security tools to enable fair election and promote the best candidates to serve our school with integrity and honesty.</p>
+                </div>
+                </center>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div id="third" class="thumbnail">
+            <center>
+                <i class="fa fa-bolt fa-5x"></i>
+                <div class="caption">
+                    <h3>Fast and Automatic</h3>
+                    <p>This service provides a reliable,fast and automatic consolidation of votes to give you the best result which comes from real-time data based from what the voters provided.</p>
+                </div>
+                </center>
+            </div>
+        </div>
+    </div>
+</div>

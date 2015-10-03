@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html data-ng-app="VoteApp">
+<head>
+    <title>PNHS Online Voting System</title>
+</head>
+    <!-- StyleSheets -->
+    <link rel="stylesheet" type="text/css" href="externals/lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="externals/lib/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="externals/css/style.css">
+    <link rel="stylesheet" href="externals/lib/sweet-alert/dist/sweetalert.css">
+    <!-- Jquery -->
+
+    <script type="text/javascript" src="externals/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="externals/lib/bootstrap/js/bootstrap.min.js"></script>
+    
+    <!-- Angular -->
+    <script type="text/javascript" src="externals/lib/angularjs/angular.min.js"></script>
+    <script type="text/javascript" src="externals/lib/angularjs/angular-route.min.js"></script>
+    <script type="text/javascript" src="externals/lib/angularjs/angular-sanitize.min.js"></script>
+
+    <!-- Core Javascript -->
+    <script src="externals/lib/sweet-alert/dist/sweetalert-dev.js"></script>
+    <script type="text/javascript" src="modules/app.js"></script>
+    <script type="text/javascript" src="services/generalService.js"></script>
+    <!-- <script type="text/javascript" src="services/auth.js"></script>-->
+<body data-ng-controller="MainController">
+<script type="text/javascript">
+var $textBox = $("#fullscreen");
+
+var press = jQuery.Event("keypress");
+
+press.keyCode = 122;
+
+window.onload= function (){
+    $textBox.trigger(press);
+}
+</script>
+<div class="banner">
+    <img src="img/yeah.png">
+</div>
+<div class="well well-sm">
+    <div class="row">
+        <div class="col-md-2">
+            <a href="#/" id="fullscreen">
+                <i class="fa fa-institution"></i>&nbsp;PNHS&nbsp;
+            </a>
+        </div>
+        <div class="col-md-2">
+            <a href="#students">
+                <i class="fa fa-list"></i>&nbsp;Students Panel&nbsp;
+            </a>
+        </div>
+        <div class="col-md-6">
+            &emsp;
+        </div>
+        <div class="col-md-2">
+            <a href="#admin">
+                <i class="fa fa-dashboard"></i>&nbsp;Admin Panel&nbsp;
+            </a>
+        </div>
+    </div>
+</div>
+
+<div ng-view>
+    
+</div>
+</body>
+</html>
