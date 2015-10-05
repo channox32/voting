@@ -38,7 +38,7 @@
                            <b> LRN (Learner's Reference Number) </b>
                         </div>
                         <div class="col-md-5">
-                            <input type="text" class="form-control" max-length="12" min-length="12" required data-ng-model="studentData.lrn"/>
+                            <input type="text" class="form-control" maxlength="12" required data-ng-model="studentData.lrn" data-ng-change="lrnCheck()"/>
                         </div>
                         <div class="col-md-2" data-ng-show="invalidLRN">
                             <span class="fa fa-remove fa-2x" style="color:red;"></span> Invalid LRN
@@ -138,7 +138,7 @@
                 <div class="row">
                     <div class="col-md-2">&nbsp;</div>
                     <div class="col-md-10">
-                        <input type="submit" style="width:inherit;" class="btn btn-primary btn-lg" value="Proceed"/>
+                        <input type="submit" style="width:inherit;" class="btn btn-primary btn-lg" data-ng-disabled="invalidLRN" value="Proceed"/>
                     </div>
                     <div class="col-md-2">&nbsp;</div>
                 </div>

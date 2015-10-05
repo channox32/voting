@@ -1,343 +1,336 @@
 <div class="container" data-ng-controller="AdminCtrl">
-	<div class="jumbotron">
-		<div class="row">
-			<div class="col-md-6">
-				<ul class="nav nav-tabs">
-					<li role="presentation" data-ng-class="{active : tab=='basic'}"><a href="javascript:void(0)" data-ng-click="changeTab('basic')">Basic</a></li>
-					<li role="presentation" data-ng-class="{active : tab=='result' || tab=='all'}" ><a href="javascript:void(0)" data-ng-click="changeTab('result')">Results</a></li>
-					<li role="presentation" data-ng-class="{active : tab=='additional'}"><a href="javascript:void(0)" data-ng-click="changeTab('additional')">Configuration</a></li>
-					<li role="presentation" data-ng-class="{active : tab=='candidate'}"><a href="javascript:void(0)" data-ng-click="changeTab('candidate')">Candidates</a></li>
-				</ul>
-			</div>
-			<div class="col-md-6">
-				<div class="pull-right">
-					<h4>Welcome&emsp;{{adminInfo.firstname}}&nbsp;{{adminInfo.lastname}}&emsp;<button class="btn btn-danger btn-sm" data-ng-click="logout()">Logout</button></h4>
-				</div>
-			</div>
-		</div>
-		<br/>
-		<div data-ng-show="tab=='basic'">
-			<div class="row">
-				<div class="col-md-10">
-					<div class="panel panel-info">
-						<div class="panel panel-heading">
-							<div class="panel-title">
-								<span class="fa fa-user"></span>&nbsp;Accounts and Roles
-							</div>
-						</div>
-						<div class="panel-body">
-							<table class="table">
-								<th>Firstname</th>
-								<th>Lastname</th>
-								<th>Username</th>
-								<th>Role</th>
-								<th>Options</th>
-								<tr data-ng-repeat="users in userList">
-									<td>{{users.firstname}}</td>
-									<td>{{users.lastname}}</td>
-									<td>{{users.username}}</td>
-									<td>{{(users.role == '1') ? "Administrator" : "Limited"}}</td>
-									<td>
-										<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" data-ng-click="setAdmin(users.admin_id)"><span class="fa fa-lock">&nbsp;</span>Change Password</button>
-										<button class="btn btn-danger btn-sm" data-ng-disabled="adminInfo.role=='2'" data-ng-click="deleteUser(users.admin_id)"><span class="fa fa-remove">&nbsp;</span>Delete</button>
-									</td>
-								</tr>
-							</table>
-						</div>
-					</div>
-				</div>
-				<!-- Modal -->
-				<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-					<div class="modal-dialog" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								<h4 class="modal-title" id="myModalLabel">Edit User Details</h4>
-							</div>
-							<div class="modal-body">
-							<div class="row">
-								<div class="col-md-3">
-									<h5>Old Password</h5><br/>
-								</div>
-								<div class="col-md-5">
-									<input type="password" data-ng-disabled="true" class="form-control" placeholder="*********">
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-3">
-									<h5>New Password</h5><br/>
-								</div>
-								<div class="col-md-5">
-									<input type="password" class="form-control" data-ng-model="password">
-								</div>
-							</div>
-													<div class="row">
-								<div class="col-md-3">
-									<h5>Confirm New Password</h5><br/>
-								</div>
-								<div class="col-md-5">
-									<input type="password" class="form-control" data-ng-model="confirmPass">
-								</div>
-								<div class="col-md-3">
-									<span style="color:green;"class="fa fa-check" data-ng-show="password==confirmPass&&password!==''&&confirmPass!==''"> Password match!</span>
-									<span style="color:red;"class="fa fa-remove" data-ng-show="password!=confirmPass&&password!==''&&confirmPass!==''"> Password does not match!</span>
-								</div>
-							</div>
-							</div>
-							<div class="modal-footer">
-								<button id="close" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-								<button type="button" class="btn btn-success" data-ng-click="changePass()">Change Password</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-10">
-					<div class="pull-right">
-						<a href="#/add_user">
-							<button  class="btn btn-info btn-sm" data-ng-disabled="adminInfo.role=='2'"><span class="fa fa-plus"></span> Add User</button>
-						</a>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div data-ng-show="tab=='result'">
-			<div class="row">
-				<div class="col-md-2">
-					<b>President</b>
-				</div>
-				<div class="col-md-8" style="border:1px dashed black;">
-					<div data-ng-repeat="president in candidateList.president">
-						<div >
-							<span>{{president.fullname}}<br/></span>
-						</div>
-						
-						<div class="progress">
-							<div class="progress-bar-primary progress-bar-striped progress-bar active" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{president.percentage}}%;">
-							</div>
-						</div>
-						
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-2">
-					<b>Vice President</b>
-				</div>
-				<div class="col-md-8" style="border:1px dashed black;">
-					<div data-ng-repeat="vice in candidateList.vice_president">
-						<div >
-							<span>{{vice.fullname}}<br/></span>
-						</div>
-						
-						<div class="progress">
-							<div class="progress-bar-success progress-bar-striped progress-bar active" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{vice.percentage}}%;">
-							</div>
-						</div>
-						
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-2">
-					<b>Secretary</b>
-				</div>
-				<div class="col-md-8" style="border:1px dashed black;">
-					<div data-ng-repeat="secretary in candidateList.secretary">
-						<div >
-							<span>{{secretary.fullname}}<br/></span>
-						</div>
-						
-						<div class="progress">
-							<div class="progress-bar-info progress-bar-striped progress-bar active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{secretary.percentage}}%;">
-							</div>
-						</div>
-						
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-2">
-					<b>Treasurer</b>
-				</div>
-				<div class="col-md-8" style="border:1px dashed black;">
-					<div data-ng-repeat="treasurer in candidateList.treasurer">
-						<div >
-							<span>{{treasurer.fullname}}<br/></span>
-						</div>
-						
-						<div class="progress">
-							<div class="progress-bar-warning progress-bar-striped progress-bar active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{treasurer.percentage}}%;">
-							</div>
-						</div>
-						
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-2">
-					<b>Public Information Officer (PIO)</b>
-				</div>
-				<div class="col-md-8" style="border:1px dashed black;">
-					<div data-ng-repeat="pio in candidateList.pio">
-						<div >
-							<span>{{pio.fullname}}<br/></span>
-						</div>
-						
-						<div class="progress">
-							<div class="progress-bar-danger progress-bar-striped progress-bar active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{pio.percentage}}%;">
-							</div>
-						</div>
-						
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-2">
-					<b>Auditor</b>
-				</div>
-				<div class="col-md-8" style="border:1px dashed black;">
-					<div data-ng-repeat="auditor in candidateList.auditor">
-						<div >
-							<span>{{auditor.fullname}}<br/></span>
-						</div>
-						
-						<div class="progress">
-							<div class="progress-bar-info progress-bar-striped progress-bar active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{auditor.percentage}}%;">
-							</div>
-						</div>
-						
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-2">
-					<b>Fourth Year Representative</b>
-				</div>
-				<div class="col-md-8" style="border:1px dashed black;">
-					<div data-ng-repeat="fourth in candidateList.fourth">
-						<div >
-							<span>{{fourth.fullname}}<br/></span>
-						</div>
-						
-						<div class="progress">
-							<div class="progress-bar-warning progress-bar-striped progress-bar active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{fourth.percentage}}%;">
-							</div>
-						</div>
-						
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-2">
-					<b>Third Year Representative</b>
-				</div>
-				<div class="col-md-8" style="border:1px dashed black;">
-					<div data-ng-repeat="third in candidateList.third">
-						<div >
-							<span>{{third.fullname}}<br/></span>
-						</div>
-						
-						<div class="progress">
-							<div class="progress-bar-warning progress-bar-striped progress-bar active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{third.percentage}}%;">
-							</div>
-						</div>
-						
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-2">
-					<b>Second Year Representative</b>
-				</div>
-				<div class="col-md-8" style="border:1px dashed black;">
-					<div data-ng-repeat="second in candidateList.second">
-						<div >
-							<span>{{second.fullname}}<br/></span>
-						</div>
-						
-						<div class="progress">
-							<div class="progress-bar-warning progress-bar-striped progress-bar active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{second.percentage}}%;">
-							</div>
-						</div>
-						
-					</div>
-				</div>
-			</div>
-		</div>
-		<div data-ng-show="tab=='all'">
-			<div class="row">
-				<div class="col-md-3">
-					<a href="javascript:void(0)"><span class="fa fa-filter fa-2x">&nbsp;</span></a><b style="font-size:18px;">Sort Results by</b> &emsp;
-				</div>
-				<div class="col-md-3">
-					<select class="form-control" data-ng-model="showResult">
-						<option data-ng-repeat="list in position" value="{{list}}">{{list}}</option>
-					</select>
-				</div>
-				<div class="col-md-3">
-					<button class="btn btn-danger btn-sm" data-ng-click="changeTab('all')"><span class="fa fa-list"></span>&nbsp;Display All</button>
-				</div>
-			</div>
-			<hr/>
-			<div data-ng-show="resultPanel!==''">
-				<div class="row">
-					<div class="col-md-2">
-						<b>{{showResult}}</b>
-					</div>
-					<div class="col-md-8" style="border:1px dashed black;">
-						<div data-ng-repeat="position in ">
-							<div >
-								<span>{{position.fullname}}<br/></span>
-							</div>
-							
-							<div class="progress">
-								<div class="progress-bar progress-bar-stripes" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{position.percentage}}%;">
-								</div>
-							</div>
-							
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div data-ng-show="tab=='additional'">
-			<span>
-				<a href="javascript:void(0)" data-ng-click="toggle('active')" data-ng-show="option=='off'"><i class="fa fa-toggle-on fa-2x"/></a>
-				<a href="javascript:void(0)" data-ng-click="toggle('none')" data-ng-show="option=='on'"><i class="fa fa-toggle-off fa-2x"/></a>
-			</span>
-			<br/>
-			<span>
-				ELECTION POLL STATUS : <span data-ng-class="{active: option=='on',disabled:option=='off'}">{{status}}</span>
-			</span>
-		</div>
-		<div data-ng-show="tab=='candidate'">
-			<div class="row">
-				<div class="col-md-12">
-					<div class="panel panel-default">
-						<div class="panel panel-heading">
-							<h3 class="panel-title">Candidate List</h3>
-						</div>
-						<div class="panel panel-body">
-							<table class="table">
-								<th>Name</th>
-								<th>Position</th>
-								<th>Party List</th>
-								<th>Grade Level</th>
-								<th>Motto</th>
-								<tr data-ng-repeat="candidate in candidateArray">
-									<td>{{candidate.fullname}}</td>
-									<td>{{candidate.position.toUpperCase()}}</td>
-									<td>{{candidate.party_id}}</td>
-									<td>{{candidate.year}}</td>
-									<td>{{candidate.motto}}</td>									
-								</tr>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>.
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-md-6">
+                <ul class="nav nav-tabs">
+                    <li role="presentation" data-ng-class="{active : tab=='basic'}"><a href="javascript:void(0)" data-ng-click="changeTab('basic')">Basic</a></li>
+                    <li role="presentation" data-ng-class="{active : tab=='result' || tab=='all'}" ><a href="javascript:void(0)" data-ng-click="changeTab('result')">Results</a></li>
+                    <li role="presentation" data-ng-class="{active : tab=='additional'}"><a href="javascript:void(0)" data-ng-click="changeTab('additional')">Configuration</a></li>
+                    <li role="presentation" data-ng-class="{active : tab=='candidate'}"><a href="javascript:void(0)" data-ng-click="changeTab('candidate')">Candidates</a></li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <div class="pull-right">
+                    <h4>Welcome&emsp;{{adminInfo.firstname}}&nbsp;{{adminInfo.lastname}}&emsp;<button class="btn btn-danger btn-sm" data-ng-click="logout()">Logout</button></h4>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div data-ng-show="tab=='basic'">
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="panel panel-info">
+                        <div class="panel panel-heading">
+                            <div class="panel-title">
+                                <span class="fa fa-user"></span>&nbsp;Accounts and Roles
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table">
+                                <th>Firstname</th>
+                                <th>Lastname</th>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Options</th>
+                                <tr data-ng-repeat="users in userList">
+                                    <td>{{users.firstname}}</td>
+                                    <td>{{users.lastname}}</td>
+                                    <td>{{users.username}}</td>
+                                    <td>{{(users.role == '1') ? "Administrator" : "Limited"}}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" data-ng-click="setAdmin(users.admin_id)"><span class="fa fa-lock">&nbsp;</span>Change Password</button>
+                                        <button class="btn btn-danger btn-sm" data-ng-disabled="adminInfo.role=='2'" data-ng-click="deleteUser(users.admin_id)"><span class="fa fa-remove">&nbsp;</span>Delete</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Edit User Details</h4>
+                            </div>
+                            <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h5>Old Password</h5><br/>
+                                </div>
+                                <div class="col-md-5">
+                                    <input type="password" data-ng-disabled="true" class="form-control" placeholder="*********">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h5>New Password</h5><br/>
+                                </div>
+                                <div class="col-md-5">
+                                    <input type="password" class="form-control" data-ng-model="password">
+                                </div>
+                            </div>
+                                                    <div class="row">
+                                <div class="col-md-3">
+                                    <h5>Confirm New Password</h5><br/>
+                                </div>
+                                <div class="col-md-5">
+                                    <input type="password" class="form-control" data-ng-model="confirmPass">
+                                </div>
+                                <div class="col-md-3">
+                                    <span style="color:green;"class="fa fa-check" data-ng-show="password==confirmPass&&password!==''&&confirmPass!==''"> Password match!</span>
+                                    <span style="color:red;"class="fa fa-remove" data-ng-show="password!=confirmPass&&password!==''&&confirmPass!==''"> Password does not match!</span>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button id="close" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-success" data-ng-click="changePass()">Change Password</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="pull-right">
+                        <a href="#/add_user">
+                            <button  class="btn btn-info btn-sm" data-ng-disabled="adminInfo.role=='2'"><span class="fa fa-plus"></span> Add User</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-ng-show="tab=='result'">
+            <div class="row">
+                <div class="col-md-2">
+                    <b>President</b>
+                </div>
+                <div class="col-md-8" style="border:1px dashed black;">
+                    <div data-ng-repeat="president in candidateList.president">
+                        <div >
+                            <span>{{president.fullname}}<br/></span>
+                        </div>
+                        
+                        <div class="progress">
+                            <div class="progress-bar-primary progress-bar-striped progress-bar active" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{president.percentage}}%;">
+                            </div>
+                            <span class="badge">{{president.votes}}</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <b>Vice President</b>
+                </div>
+                <div class="col-md-8" style="border:1px dashed black;">
+                    <div data-ng-repeat="vice in candidateList.vice_president">
+                        <div >
+                            <span>{{vice.fullname}}<br/></span>
+                        </div>
+                        
+                        <div class="progress">
+                            <div class="progress-bar-success progress-bar-striped progress-bar active" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{vice.percentage}}%;">
+                            </div>
+                            <span class="badge">{{vice.votes}}</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <b>Secretary</b>
+                </div>
+                <div class="col-md-8" style="border:1px dashed black;">
+                    <div data-ng-repeat="secretary in candidateList.secretary">
+                        <div >
+                            <span>{{secretary.fullname}}<br/></span>
+                        </div>
+                        
+                        <div class="progress">
+                            <div class="progress-bar-info progress-bar-striped progress-bar active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{secretary.percentage}}%;">
+                            </div>
+                            <span class="badge">{{secretary.votes}}</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <b>Treasurer</b>
+                </div>
+                <div class="col-md-8" style="border:1px dashed black;">
+                    <div data-ng-repeat="treasurer in candidateList.treasurer">
+                        <div >
+                            <span>{{treasurer.fullname}}<br/></span>
+                        </div>
+                        
+                        <div class="progress">
+                            <div class="progress-bar-warning progress-bar-striped progress-bar active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{treasurer.percentage}}%;">
+                            </div>
+                            <span class="badge">{{treasurer.votes}}</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <b>Public Information Officer (PIO)</b>
+                </div>
+                <div class="col-md-8" style="border:1px dashed black;">
+                    <div data-ng-repeat="pio in candidateList.pio">
+                        <div >
+                            <span>{{pio.fullname}}<br/></span>
+                        </div>
+                        
+                        <div class="progress">
+                            <div class="progress-bar-danger progress-bar-striped progress-bar active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{pio.percentage}}%;">
+                            </div>
+                            <span class="badge">{{pio.votes}}</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <b>Auditor</b>
+                </div>
+                <div class="col-md-8" style="border:1px dashed black;">
+                    <div data-ng-repeat="auditor in candidateList.auditor">
+                        <div >
+                            <span>{{auditor.fullname}}<br/></span>
+                        </div>
+                        
+                        <div class="progress">
+                            <div class="progress-bar-info progress-bar-striped progress-bar active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{auditor.percentage}}%;">
+                            </div>
+                            <span class="badge">{{auditor.votes}}</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <b>Fourth Year Representative</b>
+                </div>
+                <div class="col-md-8" style="border:1px dashed black;">
+                    <div data-ng-repeat="fourth in candidateList.fourth">
+                        <div >
+                            <span>{{fourth.fullname}}<br/></span>
+                        </div>
+                        
+                        <div class="progress">
+                            <div class="progress-bar-warning progress-bar-striped progress-bar active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{fourth.percentage}}%;">
+                            </div>
+                            <span class="badge">{{fourth.votes}}</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <b>Third Year Representative</b>
+                </div>
+                <div class="col-md-8" style="border:1px dashed black;">
+                    <div data-ng-repeat="third in candidateList.third">
+                        <div >
+                            <span>{{third.fullname}}<br/></span>
+                        </div>
+                        
+                        <div class="progress">
+                            <div class="progress-bar-warning progress-bar-striped progress-bar active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{third.percentage}}%;">
+                            </div>
+                            <span class="badge">{{third.votes}}</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <b>Second Year Representative</b>
+                </div>
+                <div class="col-md-8" style="border:1px dashed black;">
+                    <div data-ng-repeat="second in candidateList.second">
+                        <div >
+                            <span>{{second.fullname}}<br/></span>
+                        </div>
+                        
+                        <div class="progress">
+                            <div class="progress-bar-warning progress-bar-striped progress-bar active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{second.percentage}}%;">
+                            </div>
+                            <span class="badge">{{second.votes}}</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-ng-show="tab=='additional'">
+             <div class="row">
+                 <div class="col-md-12">
+                     <div class="panel panel-default">
+                         <div class="panel panel-heading">
+                             <h3 class="panel-title">Voters List</h3>
+                         </div>
+                         <div class="panel panel-body">
+                             <table class="table table-striped">
+                                 <th>LRN #</th>
+                                 <th>Name</th>
+                                 <th>Gender</th>
+                                 <th>Grade/Year</th>
+                                 <th>Section</th>
+                                 <th>Date Voted</th>
+                                 <tr data-ng-repeat="student in studentList">
+                                     <td data-ng-bind="student.lrn"></td>
+                                     <td>{{student.firstname + " " +student.lastname}}</td>
+                                     <td data-ng-bind="student.gender"></td>
+                                     <td data-ng-bind="student.yearlevel"></td>
+                                     <td data-ng-bind="student.section"></td>
+                                     <td data-ng-bind="student.date"></td>
+                                     
+                                 </tr>
+                             </table>
+                         </div>
+                     </div>
+                 </div>
+             </div>       
+        </div>
+        <div data-ng-show="tab=='candidate'">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel panel-heading">
+                            <h3 class="panel-title">Candidate List</h3>
+                        </div>
+                        <div class="panel panel-body">
+                            <table class="table">
+                                <th>Name</th>
+                                <th>Position</th>
+                                <th>Party List</th>
+                                <th>Grade Level</th>
+                                <th>Motto</th>
+                                <tr data-ng-repeat="candidate in candidateArray">
+                                    <td>{{candidate.fullname}}</td>
+                                    <td>{{candidate.position.toUpperCase()}}</td>
+                                    <td>{{candidate.party_id}}</td>
+                                    <td>{{candidate.year}}</td>
+                                    <td>{{candidate.motto}}</td>                                    
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>.
 </div>

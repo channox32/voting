@@ -23,6 +23,32 @@ voteApp.service('generalService', ['$http', '$window',
                 return sessionStorage;
             },
 
+            studentExists : function(data,callback){
+                $http.post(this.apiRef() + 'studentExists',data)
+                .then(function(response){
+                    if(response.data.result === 'success' && response.data.body <= 0){
+                        callback.success()
+                    }else{
+                        callback.error();
+                    }
+                },function(error){
+                    callback.error("Error");
+                });
+            },
+
+            getAllStudents : function(callback){
+                $http.get(this.apiRef() + 'getAllStudents')
+                .then(function(response){
+                    if(response.data.result === 'success'){
+                        callback.success(response.data.data);
+                    }else{
+                        callback.error(response.data.message);
+                    }
+                },function(error){
+                    callback.error(error.getMessage());
+                });
+            },
+
             registerStudent: function(credential, callback) {
                 if(typeof credential === 'object') {
                     $http.post(this.apiRef() + 'registerStudent',credential)

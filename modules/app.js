@@ -133,6 +133,9 @@ voteApp.controller('AdminCtrl',['$scope','generalService', function($scope,gener
         $scope.candidateArray = [];
 
         $scope.changeTab = function(tab){
+            if(tab === 'additional'){
+                $scope.getAllStudents();   
+            }
             $scope.tab = tab;
         };
 
@@ -320,6 +323,22 @@ voteApp.controller('AdminCtrl',['$scope','generalService', function($scope,gener
                 }
         });
 
+        $scope.getAllStudents = function(){
+            $scope.studentList = [];
+            generalService.getAllStudents({
+                success: function(list){
+                    var newDate = new Date();
+                    for(var i = 0 ; i < list.length;i++){
+                       newDate = new Date(list[i].date);
+                       list[i].date = newDate.toDateString() + ' ' + newDate.getHours() + ':' + newDate.getMinutes() + ':' + newDate.getSeconds();
+                       $scope.studentList.push(list[i]);
+                    }
+                },  
+                error : function(errorLog){
+                    swal("Erro!", errorLog, "error");
+                }
+            })
+        };
 
         $scope.getAllUser = function(){
             generalService.getAllUser({
@@ -386,6 +405,13 @@ voteApp.controller('AdminCtrl',['$scope','generalService', function($scope,gener
 voteApp.controller('StudentCtrl',['$scope','generalService', function($scope, generalService){
         $scope.currentPage = generalService.currentPage ? generalService.currentPage : 'registration';
         $scope.cStep = 1;
+        $scope.lrnCheck = function(){
+            if($scope.studentData.lrn.match(/[A-Za-z]/g) === null){
+                $scope.invalidLRN = false;
+            }else{
+                $scope.invalidLRN = true;
+            }
+        }
         $scope.studentData = {
             lrn : '',
             firstname : '',
@@ -459,20 +485,27 @@ voteApp.controller('StudentCtrl',['$scope','generalService', function($scope, ge
 
         $scope.registerStudent = function(){
             $scope.studentData.birthdate = $scope.bdate.month + $scope.bdate.date + $scope.bdate.year;
-            generalService.registerStudent($scope.studentData,{
-                success : function(data){
-                    swal("Good job!", "You're account successfully saved!", "success");
-                    $scope.currentPage = 'choose';
-                    generalService._storageHandler().page = $scope.currentPage;
-                    generalService.currentPage = $scope.currentPage;
-                    generalService._storageHandler().registerId = data;
-                    $scope.cStep += 32;
+            generalService.studentExists({lrn : $scope.studentData.lrn},{
+                success : function(){
+                        generalService.registerStudent($scope.studentData,{
+                            success : function(data){
+                                swal("Good job!", "You're account successfully saved!", "success");
+                                $scope.currentPage = 'choose';
+                                generalService._storageHandler().page = $scope.currentPage;
+                                generalService.currentPage = $scope.currentPage;
+                                generalService._storageHandler().registerId = data;
+                                $scope.cStep += 32;
+                            },
+                            error : function(error){
+                                $scope.errorMessage = error;
+                                swal("Oops!", "Something went wrong!" + $scope.errorMessage + "," +  "error");
+                            }
+                        });
                 },
-                error : function(error){
-                    $scope.errorMessage = error;
-                    swal("Oops!", "Something went wrong!" + $scope.errorMessage + "," +  "error");
+                error : function(){
+                    swal("Error","You can only vote once. Failed to register!","error");
                 }
-            });
+            })
         };
         $scope.getPartyInfo = function(id){
             $scope.options = true;
@@ -632,16 +665,6 @@ voteApp.controller('StudentCtrl',['$scope','generalService', function($scope, ge
         }
 
         // Watchers
-
-        $scope.$watch(function(){
-            return $scope.studentData.lrn;
-        },function(newValue,oldValue){
-            if(newValue.match(/[A-Z][a-z]/g) !== null){
-                $scope.invalidLRN = false;
-            }else{
-                $scope.invalidLRN = true;
-            }
-        });
 
         $scope.$watch(function(){
             return $scope.studentData.yearlevel;

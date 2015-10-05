@@ -22,11 +22,32 @@ function getPOSTParams(){
     return $app->request->getBody();
 }
 
+$app->get('/getAllStudents',function() use ($app){
+    if($query = db()->select('student_info','*')){
+        echo json_encode(array('result'=> 'success', 'data' => $query->all()));
+    }else{
+        echo json_encode(array('result'=> 'error','message'=>$query->error()));
+    }
+});
+
+
+$app->post('/studentExists', function() use ($app){
+    $params = getPOSTParams();
+    $params = json_decode($params,true);
+    $data = array('lrn' => $params['lrn']);
+
+    if($query= db()->select('student_info','*',$data)){
+        echo json_encode(array('result'=>'success','body'=> $query->count()));
+    }else{
+        echo json_encode(array('result'=>'error','message'=> "Test"));
+    }
+});
 
 $app->post('/registerStudent',function() use ($app) {	
     $params = getPOSTParams();
     $params = json_decode($params,true);
      $inputData = array(
+            'lrn' => $params['lrn'],   
      		'firstname' => $params['firstname'],
      		'lastname' => $params['lastname'],
      		'middlename' => $params['middlename'],
