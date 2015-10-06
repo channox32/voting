@@ -131,9 +131,11 @@ voteApp.controller('AdminCtrl',['$scope','generalService', function($scope,gener
         $scope.password = '';
         $scope.confirmPass = '';
         $scope.candidateArray = [];
+        $scope.page = 1;
 
         $scope.changeTab = function(tab){
-            if(tab === 'additional'){
+            if(tab === 'additional' || tab==='result'){
+                document.getElementById('pagination').innerHTML = '';
                 $scope.getAllStudents();   
             }
             $scope.tab = tab;
@@ -164,6 +166,7 @@ voteApp.controller('AdminCtrl',['$scope','generalService', function($scope,gener
                 $scope.confirmPass = '';
             }
         };
+
 
         $scope.loginAdmin = function() {
             swal({title: "Please Wait...",   text: "Checking credential...",   timer: 1000,   showConfirmButton: false });
@@ -207,6 +210,7 @@ voteApp.controller('AdminCtrl',['$scope','generalService', function($scope,gener
         $scope.getAllVotes = function(){
             generalService.getAllVotes({
                 success : function(votes){
+                    $scope.votes = votes.length;
                     for(var i =0;i<votes.length;i++){
                         for(var position in votes[i]){
                             if($scope.candidateList[position]){
@@ -226,16 +230,6 @@ voteApp.controller('AdminCtrl',['$scope','generalService', function($scope,gener
                     console.log(msg);
                 }
             });
-        };
-
-        $scope.toggle = function(option){
-            if(option === 'active'){
-                $scope.option = 'on';
-                $scope.status = 'Active';
-            }else{
-                $scope.option = 'off';
-                $scope.status = 'Not Available';
-            }
         };
 
         $scope.deleteUser = function(userId){
@@ -323,19 +317,42 @@ voteApp.controller('AdminCtrl',['$scope','generalService', function($scope,gener
                 }
         });
 
+        $scope.pagination = function(){
+            var availablePage = Math.ceil($scope.studentList.length / 10),paginationControl = $('#pagination');
+            paginationControl.append('<button class="btn btn-default btn-sm" data-ng-disabled="page<=1" data-ng-click="changePage(\'prev\')">Prev</button>')
+            for(var i = 1; i <= availablePage;i++){
+                paginationControl.append('<button class="btn btn-default btn-sm" data-ng-click="changePage('+ i + ')">'+ i +'</button>');    
+            }
+            paginationControl.append('<button class="btn btn-default btn-sm" data-ng-click="changePage(\'next\')">Next</button>')
+        };
+
+        $scope.changePage = function(page){
+            // switch(page){
+            //     case 'prev' :
+            //       $scope.page--;
+            //       break;
+            //     default :
+            //       console.log(page);
+            //       break;
+            // }
+            alert(page);
+        };
+
         $scope.getAllStudents = function(){
             $scope.studentList = [];
             generalService.getAllStudents({
                 success: function(list){
+                    $scope.students = list.length;
                     var newDate = new Date();
                     for(var i = 0 ; i < list.length;i++){
                        newDate = new Date(list[i].date);
                        list[i].date = newDate.toDateString() + ' ' + newDate.getHours() + ':' + newDate.getMinutes() + ':' + newDate.getSeconds();
                        $scope.studentList.push(list[i]);
                     }
+                       $scope.pagination();
                 },  
                 error : function(errorLog){
-                    swal("Erro!", errorLog, "error");
+                    swal("Error!", errorLog, "error");
                 }
             })
         };

@@ -5,7 +5,7 @@
                 <ul class="nav nav-tabs">
                     <li role="presentation" data-ng-class="{active : tab=='basic'}"><a href="javascript:void(0)" data-ng-click="changeTab('basic')">Basic</a></li>
                     <li role="presentation" data-ng-class="{active : tab=='result' || tab=='all'}" ><a href="javascript:void(0)" data-ng-click="changeTab('result')">Results</a></li>
-                    <li role="presentation" data-ng-class="{active : tab=='additional'}"><a href="javascript:void(0)" data-ng-click="changeTab('additional')">Configuration</a></li>
+                    <li role="presentation" data-ng-class="{active : tab=='additional'}"><a href="javascript:void(0)" data-ng-click="changeTab('additional')">User Accounts</a></li>
                     <li role="presentation" data-ng-class="{active : tab=='candidate'}"><a href="javascript:void(0)" data-ng-click="changeTab('candidate')">Candidates</a></li>
                 </ul>
             </div>
@@ -103,6 +103,9 @@
             </div>
         </div>
         <div data-ng-show="tab=='result'">
+        <div class="row">
+            <h3 align="center" style="color:red;">Total Number of Votes Consolidated : <span style="font-weight:bolder;color:blue;">{{votes  + ' / '  + students + ' '}}&nbsp;students</span></h3>
+        </div>
             <div class="row">
                 <div class="col-md-2">
                     <b>President</b>
@@ -118,7 +121,6 @@
                             </div>
                             <span class="badge">{{president.votes}}</span>
                         </div>
-                        
                     </div>
                 </div>
             </div>
@@ -290,20 +292,25 @@
                                  <th>Grade/Year</th>
                                  <th>Section</th>
                                  <th>Date Voted</th>
-                                 <tr data-ng-repeat="student in studentList">
+                                 <tr data-ng-repeat="student in studentList | orderBy: student.yearlevel">
                                      <td data-ng-bind="student.lrn"></td>
                                      <td>{{student.firstname + " " +student.lastname}}</td>
                                      <td data-ng-bind="student.gender"></td>
                                      <td data-ng-bind="student.yearlevel"></td>
                                      <td data-ng-bind="student.section"></td>
                                      <td data-ng-bind="student.date"></td>
-                                     
                                  </tr>
                              </table>
                          </div>
                      </div>
                  </div>
-             </div>       
+             </div>    
+             <div class="row">
+                 <center>
+                     <p id="pagination">
+                     </p>
+                 </center>
+             </div>   
         </div>
         <div data-ng-show="tab=='candidate'">
             <div class="row">
