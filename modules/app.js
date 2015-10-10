@@ -319,9 +319,9 @@ voteApp.controller('AdminCtrl',['$scope','generalService', function($scope,gener
 
         $scope.pagination = function(){
             var availablePage = Math.ceil($scope.studentList.length / 10),paginationControl = $('#pagination');
-            paginationControl.append('<button class="btn btn-default btn-sm" data-ng-disabled="page<=1" data-ng-click="changePage(\'prev\')">Prev</button>')
+            paginationControl.append('<button class="btn btn-default btn-sm" data-ng-disabled="page<=1" data-ng-click="changePage(\'prev\')">Prev</button>&nbsp;')
             for(var i = 1; i <= availablePage;i++){
-                paginationControl.append('<button class="btn btn-default btn-sm" data-ng-click="changePage('+ i + ')">'+ i +'</button>');    
+                paginationControl.append('<button class="btn btn-default btn-sm" data-ng-click="changePage('+ i + ')">'+ i +'</button>&nbsp;');    
             }
             paginationControl.append('<button class="btn btn-default btn-sm" data-ng-click="changePage(\'next\')">Next</button>')
         };

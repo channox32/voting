@@ -292,7 +292,7 @@
                                  <th>Grade/Year</th>
                                  <th>Section</th>
                                  <th>Date Voted</th>
-                                 <tr data-ng-repeat="student in studentList | orderBy: student.yearlevel">
+                                 <tr data-ng-repeat="student in studentList | orderBy:'yearlevel'">
                                      <td data-ng-bind="student.lrn"></td>
                                      <td>{{student.firstname + " " +student.lastname}}</td>
                                      <td data-ng-bind="student.gender"></td>
@@ -314,6 +314,12 @@
         </div>
         <div data-ng-show="tab=='candidate'">
             <div class="row">
+            <div class="col-md-12">
+                <div class="pull-right">
+                    <button class="btn btn-success "><span class="fa fa-user"></span>&nbsp;Add Candidate</button>
+                </div>
+            </div>
+            <br/>
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel panel-heading">
