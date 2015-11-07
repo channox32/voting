@@ -1,13 +1,11 @@
-var students = angular.module("pnhs.voting.student",[]);
-
-students.config(function($routeProvider){
+(function(){
+angular.module("pnhs.voting.student",[])
+.config(function($routeProvider){
     $routeProvider.when('/students',{
         templateUrl : 'modules/students/index.html',
         controller : 'StudentCtrl'
     });
-});
-
-students.controller('StudentCtrl',['$scope','generalService', function($scope, generalService){
+}).controller('StudentCtrl',['$scope','generalService', function($scope, generalService){
         $scope.currentPage = generalService.currentPage ? generalService.currentPage : 'registration';
         $scope.cStep = 1;
         $scope.lrnCheck = function(){
@@ -323,3 +321,6 @@ students.controller('StudentCtrl',['$scope','generalService', function($scope, g
             }
         });
 }]);
+}());
+
+

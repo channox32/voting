@@ -1,13 +1,13 @@
-var admin = angular.module("pnhs.voting.admin",[]);
+(function (){
+ 'use strict';
+angular.module("pnhs.voting.admin",[])
 
-admin.config(function($routeProvider){
+.config(function($routeProvider){
     $routeProvider.when('/admin',{
        templateUrl : 'modules/admin/index.html',
         controller: 'AdminCtrl'
     });
-});
-
-admin.controller('AdminCtrl',['$scope','generalService', function($scope,generalService,auth){
+}).controller('AdminCtrl',['$scope','generalService', function($scope,generalService,auth){
         $scope.adminCredential = {};
         $scope.adminInfo = {};
         $scope.tab = 'basic';
@@ -335,3 +335,7 @@ admin.controller('AdminCtrl',['$scope','generalService', function($scope,general
             }
         });
 }]);
+    
+}());
+
+

@@ -1,9 +1,9 @@
-/** globals , angular**/
+/*global angular*/
 
-var voteApp = angular.module('VoteApp');
+(function (){
     'use strict';
-
-voteApp.service('generalService', ['$http', '$window',
+angular.module('VoteApp')
+    .service('generalService', ['$http', '$window',
     function ($http, $window) {
         function generalService() {
             var _self = this;
@@ -212,3 +212,5 @@ voteApp.service('generalService', ['$http', '$window',
         
     }
 ]);
+}());
+
