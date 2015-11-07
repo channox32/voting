@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 /*global angular*/
 (function (){
     'use strict';
@@ -11,7 +11,6 @@ angular.module('VoteApp', [
    ]);
 
 }());
-=======
 var voteApp = angular.module('VoteApp', ['ngRoute']);
 
 voteApp.config(function($routeProvider) {
@@ -749,4 +748,3 @@ voteApp.controller('StudentCtrl',['$scope','generalService', function($scope, ge
             }
         });
 }]);
->>>>>>> c6b9c50ee664670558690709449185aef7b9b973

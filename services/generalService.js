@@ -1,24 +1,8 @@
-
 /*global angular*/
-
-(function (){
-    'use strict';
 angular.module('VoteApp')
-    .service('generalService', ['$http', '$window',
-    function ($http, $window) {
-        function generalService() {
-            var _self = this;
-            
-            _self.isLoggedIn = sessionStorage.userId ? true : false;
-
-            _self.redirect = function (page){
-                if (page) {
-var voteApp = angular.module('VoteApp');
-
-voteApp.service('generalService', ['$http', '$window',
+.service('generalService', ['$http', '$window',
     function($http, $window) {
         return {
-            
             isLoggedIn : sessionStorage.userId ? true : false,
 
             redirect : function(page){
@@ -27,32 +11,6 @@ voteApp.service('generalService', ['$http', '$window',
                 }else{
                     $window.location.href = "#/"
                 }
-            }
-            
-            _self.currentPage = sessionStorage.page ? sessionStorage.page : 'registration';
-            
-            _self.apiRef = function () {
-                return $window.location.origin + window.location.pathname + 'api/';
-            }
-            _self._storageHandler = function() {
-                return sessionStorage;
-            }
-
-            _self.studentExists = function(data,callback){
-                $http.post(_self.apiRef() + 'studentExists',data)
-                .then(function(response){
-                    if (response.data.result === 'success' && response.data.body <= 0) {
-                        callback.success();
-                    }else {
-                        callback.error();
-                    }
-                },function (error) {
-                    callback.error("Error");
-                });
-            }
-
-            _self.getAllStudents = function(callback){
-                $http.get(_self.apiRef() + 'getAllStudents')
             },
             
             currentPage : sessionStorage.page ? sessionStorage.page : 'registration',
@@ -62,37 +20,6 @@ voteApp.service('generalService', ['$http', '$window',
             },
             _storageHandler: function() {
                 return sessionStorage;
-            },
-
-            studentExists : function(data,callback){
-                $http.post(this.apiRef() + 'studentExists',data)
-                .then(function(response){
-                    if(response.data.result === 'success' && response.data.body <= 0){
-                        callback.success()
-                    }else{
-                        callback.error();
-                    }
-                },function(error){
-                    callback.error("Error");
-                });
-            },
-
-            getAllStudents : function(callback){
-                $http.get(this.apiRef() + 'getAllStudents')
-                .then(function(response){
-                    if(response.data.result === 'success'){
-                        callback.success(response.data.data);
-                    }else{
-                        callback.error(response.data.message);
-                    }
-                },function(error){
-                    callback.error(error.getMessage());
-                });
-            }
-
-            _self.registerStudent = function(credential, callback) {
-                if(typeof credential === 'object') {
-                    $http.post(_self.apiRef() + 'registerStudent',credential)
             },
 
             registerStudent: function(credential, callback) {
@@ -106,10 +33,17 @@ voteApp.service('generalService', ['$http', '$window',
                             }
                         });
                 }
-            }
+            },
+            getAllStudents : function(callback){
+             $http.get(this.apiRef() + 'getAllStudents')
+                 .then(function(response) {
+                    if(response.data){
+                        callback.success(response.data);
+                    }
+                 },function(errorLog){
+                    callback.error(errorLog);
+                 });
 
-            _self.getCandidateInfo = function(callback){
-                $http.post(_self.apiRef() + 'getCandidateInfo')
             },
 
             getCandidateInfo : function(callback){
@@ -118,15 +52,10 @@ voteApp.service('generalService', ['$http', '$window',
                         if(typeof candidateData.data === 'object'){
                                callback.success(candidateData.data); 
                         }
-                    }, function error(errorLog){
+                    },function error(errorLog){
                         callback.error(errorLog);
                         console.log(errorLog);
                     });
-            }
-
-            _self.loginAdmin = function (adminData, callback){
-                if(adminData.username && adminData.password){
-                    $http.post(_self.apiRef() + 'adminLogin', adminData)
             },
 
             loginAdmin : function (adminData, callback){
@@ -136,7 +65,6 @@ voteApp.service('generalService', ['$http', '$window',
                         if(typeof response.data === 'object'){
                             callback.success(response.data);
                         }else{
-                            _selfisLoggedIn=false;
                             this.isLoggedIn=false;
                             callback.error({});
                         }
@@ -144,23 +72,6 @@ voteApp.service('generalService', ['$http', '$window',
                         callback.error(error.statusText);
                     })
                 }
-            }
-
-            _self.changePass = function(data, callback){
-                $http.post(_self.apiRef() + 'changePass', data)
-            },
-
-            changePass : function(data, callback){
-                $http.post(this.apiRef() + 'changePass', data)
-                .then(function(response){
-                    callback.success(response.data.result);
-                }, function(errorLog){
-                    callback.error(errorLog);
-                });
-            }
-
-            _self.getAdminDetails = function (adminId, callback) {
-                $http.get(_self.apiRef() + 'getAdminDetails/' + adminId)
             },
 
             getAdminDetails : function (adminId, callback) {
@@ -170,11 +81,6 @@ voteApp.service('generalService', ['$http', '$window',
                 },function(error){
                     callback.error(error);
                 })
-            }
-
-            _self.voteCandidates =  function(votemodel , callback){
-                if(typeof votemodel === 'object') {
-                    $http.post(_self.apiRef() + 'voteCandidates',votemodel)
             },
 
             voteCandidates : function(votemodel , callback){
@@ -188,9 +94,6 @@ voteApp.service('generalService', ['$http', '$window',
                 }else{
                     callback.error({});
                 }
-            }
-            _self.getAllVotes = function(callback){
-                $http.get(_self.apiRef() + 'getAllVotes')
             },
             getAllVotes : function(callback){
                 $http.get(this.apiRef() + 'getAllVotes')
@@ -203,10 +106,6 @@ voteApp.service('generalService', ['$http', '$window',
                 }, function (errorLog){
                     callback.error(errorLog)
                 });
-            }
-
-            _self.insertUser =  function(userInfo , callback){
-                $http.post(_self.apiRef() + 'insertUser', userInfo)
             },
 
             insertUser :  function(userInfo , callback){
@@ -216,10 +115,6 @@ voteApp.service('generalService', ['$http', '$window',
                 },function(errorLog){
                     callback.error(errorLog)
                 });
-            }
-
-            _self.deleteUser = function(userId, callback){
-                $http.get(_self.apiRef() + 'deleteUser/' + userId)
             },
 
             deleteUser : function(userId, callback){
@@ -229,10 +124,6 @@ voteApp.service('generalService', ['$http', '$window',
                 },function(error){
                     callback.error(result);
                 });
-            }
-
-            _self.getAllUser = function(callback){
-                $http.post(_self.apiRef() + 'getAllUser')
             },
 
             getAllUser : function(callback){
@@ -246,10 +137,6 @@ voteApp.service('generalService', ['$http', '$window',
                 },function(error){
                     callback.error(error);
                 });
-            }
-
-            _self.consolidateVotes = function(data,callback){
-                $http.post(_self.apiRef() + 'consolidateVotes', data)
             },
 
             consolidateVotes : function(data,callback){
@@ -259,14 +146,6 @@ voteApp.service('generalService', ['$http', '$window',
                 },function(errorLog){
                     callback.error(errorLog);
                 });
-            }
-
-            _self.verification = function(passcode,callback){
-                var data = {
-                    passcode : passcode 
-                };
-                $http.post(_self.apiRef() + 'verification',data)
-
             },
             setStatusPoll : function(data,callback){
 
@@ -276,7 +155,6 @@ voteApp.service('generalService', ['$http', '$window',
                     passcode : passcode 
                 };
                 $http.post(this.apiRef() + 'verification',data)
-
                 .then(function(response){   
                     if(response.data.result === 'success'){
                         callback.success(response.data.parties);
@@ -286,10 +164,6 @@ voteApp.service('generalService', ['$http', '$window',
                 },function(errorLog){
                     callback.error(errorLog);
                 });
-            }
-
-            _self.getAllParties = function(callback){
-                $http.get(_self.apiRef() + 'getAllParties')
             },
 
             getAllParties : function(callback){
@@ -304,15 +178,6 @@ voteApp.service('generalService', ['$http', '$window',
                     callback.error(errorLog);
                 });
             }
-            return _self;
-        }
-        
-        return new generalService();
-        
-    }
-]);
-}());
-
         };
     }
 ]);
