@@ -1,4 +1,4 @@
-<div class="container" data-ng-controller="AdminCtrl">
+<div class="container">
     <div class="jumbotron">
         <div class="row">
             <div class="col-md-offset-3">&nbsp;
@@ -9,20 +9,20 @@
                         <h3 class="panel-title">Login </h3>
                     </div>
                         <div class="panel panel-body">
-                        <form data-ng-submit="loginAdmin()">
+                        <form data-ng-submit="admin.loginAdmin()">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label><span class="fa fa-user"></span> Username&emsp;</label><input type="text" class="form-control" data-ng-model="adminCredential.username"/>
+                                    <label><span class="fa fa-user"></span> Username&emsp;</label><input type="text" class="form-control" data-ng-model="admin.adminCredential.username"/>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label><span class="fa fa-lock"></span> Password&emsp;</label><input type="password" class="form-control" data-ng-model="adminCredential.password"/>
+                                    <label><span class="fa fa-lock"></span> Password&emsp;</label><input type="password" class="form-control" data-ng-model="admin.adminCredential.password"/>
                                 </div>
                             </div>
                             <br/>
 
-                            <div class="alert alert-warning alert-dismissible" role="alert" data-ng-show="loginError">
+                            <div class="alert alert-warning alert-dismissible" role="alert" data-ng-show="admin.loginError">
                               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span></button>
                               <strong>Error!</strong> Incorrect Email or Password

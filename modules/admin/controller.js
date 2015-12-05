@@ -1,17 +1,23 @@
 (function (){
  'use strict';
 angular.module("pnhs.voting.admin",[])
+ .config(function($routeProvider){
+        $routeProvider.when('/admin',{
+           templateUrl : 'modules/admin/index.html',
+            controller: 'AdminCtrl',
+            controllerAs : 'admin'
+        });
+})
+.controller('AdminCtrl',AdminCtrl);
 
-.config(function($routeProvider){
-    $routeProvider.when('/admin',{
-       templateUrl : 'modules/admin/index.html',
-        controller: 'AdminCtrl'
-    });
-}).controller('AdminCtrl',['$scope','generalService', function($scope,generalService,auth){
-        $scope.adminCredential = {};
-        $scope.adminInfo = {};
-        $scope.tab = 'basic';
-        $scope.statistics = {
+AdminCtrl.$inject = ['$scope','generalService'];
+    
+function AdminCtrl($scope,generalService){
+    var _self = this;
+_self.adminCredential = {};
+        _self.adminInfo = {};
+        _self.tab = 'basic';
+        _self.statistics = {
             president : [],
             vice_president : [],
             secretary : [],
@@ -23,7 +29,7 @@ angular.module("pnhs.voting.admin",[])
             second : []
         };
 
-        $scope.candidateList = {
+        _self.candidateList = {
             president : [],
             vice_president : [],
             secretary : [],
@@ -35,7 +41,7 @@ angular.module("pnhs.voting.admin",[])
             second : []
         };
 
-        $scope.position = [
+        _self.position = [
         "President",
         "Vice President",
         "Secretary",
@@ -46,34 +52,34 @@ angular.module("pnhs.voting.admin",[])
         "Third Year Rep.", 
         "Second Year Rep."
         ];
-        $scope.status = 'Not Available';
-        $scope.option = 'off';
-        $scope.showResult = '';
-        $scope.loginError = false;
-        $scope.resultPanel = '';
-        $scope.userList = [];
-        $scope.password = '';
-        $scope.confirmPass = '';
-        $scope.candidateArray = [];
-        $scope.page = 1;
+        _self.status = 'Not Available';
+        _self.option = 'off';
+        _self.showResult = '';
+        _self.loginError = false;
+        _self.resultPanel = '';
+        _self.userList = [];
+        _self.password = '';
+        _self.confirmPass = '';
+        _self.candidateArray = [];
+        _self.page = 1;
 
-        $scope.changeTab = function(tab){
+        _self.changeTab = function(tab){
             if(tab === 'additional' || tab==='result'){
                 document.getElementById('pagination').innerHTML = '';
-                $scope.getAllStudents();   
+                _self.getAllStudents();   
             }
-            $scope.tab = tab;
+            _self.tab = tab;
         };
 
-        $scope.setAdmin = function(id){
-            $scope.currentID = id;
+        _self.setAdmin = function(id){
+            _self.currentID = id;
         };
 
-        $scope.changePass = function(){
-            if($scope.password === $scope.confirmPass){
+        _self.changePass = function(){
+            if(_self.password === _self.confirmPass){
                 var data = {
-                    admin_id : $scope.currentID || '',
-                    password : $scope.confirmPass
+                    admin_id : _self.currentID || '',
+                    password : _self.confirmPass
                 };
 
                 generalService.changePass(data,{
@@ -86,68 +92,68 @@ angular.module("pnhs.voting.admin",[])
                 });
                 
             }else{
-                $scope.password = '';
-                $scope.confirmPass = '';
+                _self.password = '';
+                _self.confirmPass = '';
             }
         };
 
 
-        $scope.loginAdmin = function() {
+        _self.loginAdmin = function() {
             swal({title: "Please Wait...",   text: "Checking credential...",   timer: 1000,   showConfirmButton: false });
-            if(typeof $scope.adminCredential !== 'undefined' || typeof $scope.adminCredential === 'object') {
-              generalService.loginAdmin($scope.adminCredential,{
+            if(typeof _self.adminCredential !== 'undefined' || typeof _self.adminCredential === 'object') {
+              generalService.loginAdmin(_self.adminCredential,{
                 success : function (response){
-                    $scope.adminInfo = response;
+                    _self.adminInfo = response;
                     generalService.isLoggedIn = (typeof response === 'object') ? true : false;
                     generalService._storageHandler().userId = response.admin_id;
-                    $scope.userList = $scope.getAllUser();
+                    _self.userList = _self.getAllUser();
                     generalService.redirect('dashboard');
 
                 },
                 error : function(error) {
                     swal("Oops!", "Incorrect Email or Password! Please Try Again!","error");
-                    $scope.adminCredential.password = '';
+                    _self.adminCredential.password = '';
                 }
               });
             }
         };
 
-        $scope.logout = function() {
+        _self.logout = function() {
             swal({title: "Please Wait...",   text: "Signing out...",   timer: 1000,   showConfirmButton: false });
             generalService.isLoggedIn = false;
-            $scope.adminInfo = {};
+            _self.adminInfo = {};
             sessionStorage.clear();
             localStorage.clear();
         };
 
-        $scope.calculatePercentage = function() {
-            var base = eval($scope.statistics.length/10),
+        _self.calculatePercentage = function() {
+            var base = eval(_self.statistics.length/10),
                 percentage;
-            for(var position in $scope.candidateList){
-                for(var i = 0; i < $scope.candidateList[position].length;i++){
-                    percentage = (($scope.candidateList[position][i].votes / base)*10).toFixed(2);
-                    $scope.candidateList[position][i].percentage = parseFloat(percentage,10);
+            for(var position in _self.candidateList){
+                for(var i = 0; i < _self.candidateList[position].length;i++){
+                    percentage = ((_self.candidateList[position][i].votes / base)*10).toFixed(2);
+                    _self.candidateList[position][i].percentage = parseFloat(percentage,10);
                 }
             }  
         };
 
-        $scope.getAllVotes = function(){
+        _self.getAllVotes = function(){
             generalService.getAllVotes({
                 success : function(votes){
-                    $scope.votes = votes.length;
+                    _self.votes = votes.length;
                     for(var i =0;i<votes.length;i++){
                         for(var position in votes[i]){
-                            if($scope.candidateList[position]){
-                                for(var j = 0;j < $scope.candidateList[position].length;j++){
-                                    if($scope.candidateList[position][j].fullname === votes[i][position]){
-                                        $scope.candidateList[position][j].votes++;
+                            if(_self.candidateList[position]){
+                                for(var j = 0;j < _self.candidateList[position].length;j++){
+                                    if(_self.candidateList[position][j].fullname === votes[i][position]){
+                                        _self.candidateList[position][j].votes++;
                                     }
                                 }
                             }
                         }
                     }
-                    $scope.statistics = votes || []; 
-                    $scope.calculatePercentage();
+                    _self.statistics = votes || []; 
+                    _self.calculatePercentage();
                 },
                 error : function(msg){
                     swal("Error!," + msg + ",error");
@@ -156,7 +162,7 @@ angular.module("pnhs.voting.admin",[])
             });
         };
 
-        $scope.deleteUser = function(userId){
+        _self.deleteUser = function(userId){
             swal({
                 title: "Delete User",
                 text: "Are you sure you want to delete this user?",
@@ -173,10 +179,10 @@ angular.module("pnhs.voting.admin",[])
                         success : function(result){
                             if(result==='success'){
                                 swal("Success","User was deleted successfully!","success");
-                                $scope.userList = [];
+                                _self.userList = [];
                             }
                             setTimeout(function(){
-                                $scope.userList = $scope.getAllUser();
+                                _self.userList = _self.getAllUser();
                             },100);
                         },
                         error : function(errorLog){
@@ -190,45 +196,45 @@ angular.module("pnhs.voting.admin",[])
 
 
         // setInterval(function(){
-        //     for(var position in $scope.candidateList){
-        //         for(var i = 0; i < $scope.candidateList[position].length;i++){
-        //             $scope.candidateList[position][i].votes = 0;
+        //     for(var position in _self.candidateList){
+        //         for(var i = 0; i < _self.candidateList[position].length;i++){
+        //             _self.candidateList[position][i].votes = 0;
         //         }
         //     }
-        //     $scope.statistics = [];
-        //     $scope.getAllVotes();
+        //     _self.statistics = [];
+        //     _self.getAllVotes();
         // },5000);
 
          generalService.getCandidateInfo({
                 success : function(candidateInfo){
                     candidateInfo.forEach(function(entry){
-                        $scope.candidateArray.push(entry);
+                        _self.candidateArray.push(entry);
                         switch(entry.position) {
                             case 'president' :
-                                $scope.candidateList.president.push({fullname:entry.fullname,votes : 0,position: entry.position});
+                                _self.candidateList.president.push({fullname:entry.fullname,votes : 0,position: entry.position});
                                 break;
                             case 'vice_president' : 
-                                $scope.candidateList.vice_president.push({fullname:entry.fullname,votes : 0,position: entry.position});
+                                _self.candidateList.vice_president.push({fullname:entry.fullname,votes : 0,position: entry.position});
                                 break;
                             case 'secretary': 
-                                $scope.candidateList.secretary.push({fullname:entry.fullname,votes : 0,position: entry.position});
+                                _self.candidateList.secretary.push({fullname:entry.fullname,votes : 0,position: entry.position});
                                  break;
                             case 'treasurer' :
-                                $scope.candidateList.treasurer.push({fullname:entry.fullname,votes : 0,position: entry.position});
+                                _self.candidateList.treasurer.push({fullname:entry.fullname,votes : 0,position: entry.position});
                             case 'pio':
-                                $scope.candidateList.pio.push({fullname:entry.fullname,votes : 0,position: entry.position});
+                                _self.candidateList.pio.push({fullname:entry.fullname,votes : 0,position: entry.position});
                                 break;
                             case 'auditor':
-                                $scope.candidateList.auditor.push({fullname:entry.fullname,votes : 0,position: entry.position});
+                                _self.candidateList.auditor.push({fullname:entry.fullname,votes : 0,position: entry.position});
                                 break;
                             case 'fourth':
-                                $scope.candidateList.fourth.push({fullname:entry.fullname,votes : 0,position: entry.position});
+                                _self.candidateList.fourth.push({fullname:entry.fullname,votes : 0,position: entry.position});
                                 break;
                             case 'third':
-                                $scope.candidateList.third.push({fullname:entry.fullname,votes : 0,position: entry.position});
+                                _self.candidateList.third.push({fullname:entry.fullname,votes : 0,position: entry.position});
                                 break;
                             case 'second':
-                                $scope.candidateList.second.push({fullname:entry.fullname,votes : 0,position: entry.position});
+                                _self.candidateList.second.push({fullname:entry.fullname,votes : 0,position: entry.position});
                                 break;
                             default :
                                 console.log("Error");
@@ -241,8 +247,8 @@ angular.module("pnhs.voting.admin",[])
                 }
         });
 
-        $scope.pagination = function(){
-            var availablePage = Math.ceil($scope.studentList.length / 10),paginationControl = $('#pagination');
+        _self.pagination = function(){
+            var availablePage = Math.ceil(_self.studentList.length / 10),paginationControl = $('#pagination');
             paginationControl.append('<button class="btn btn-default btn-sm" data-ng-disabled="page<=1" data-ng-click="changePage(\'prev\')">Prev</button>&nbsp;')
             for(var i = 1; i <= availablePage;i++){
                 paginationControl.append('<button class="btn btn-default btn-sm" data-ng-click="changePage('+ i + ')">'+ i +'</button>&nbsp;');    
@@ -250,10 +256,10 @@ angular.module("pnhs.voting.admin",[])
             paginationControl.append('<button class="btn btn-default btn-sm" data-ng-click="changePage(\'next\')">Next</button>')
         };
 
-        $scope.changePage = function(page){
+        _self.changePage = function(page){
             // switch(page){
             //     case 'prev' :
-            //       $scope.page--;
+            //       _self.page--;
             //       break;
             //     default :
             //       console.log(page);
@@ -262,18 +268,18 @@ angular.module("pnhs.voting.admin",[])
             alert(page);
         };
 
-        $scope.getAllStudents = function(){
-            $scope.studentList = [];
+        _self.getAllStudents = function(){
+            _self.studentList = [];
             generalService.getAllStudents({
                 success: function(list){
-                    $scope.students = list.length;
+                    _self.students = list.length;
                     var newDate = new Date();
                     for(var i = 0 ; i < list.length;i++){
                        newDate = new Date(list[i].date);
                        list[i].date = newDate.toDateString() + ' ' + newDate.getHours() + ':' + newDate.getMinutes() + ':' + newDate.getSeconds();
-                       $scope.studentList.push(list[i]);
+                       _self.studentList.push(list[i]);
                     }
-                       $scope.pagination();
+                       _self.pagination();
                 },  
                 error : function(errorLog){
                     swal("Error!", errorLog, "error");
@@ -281,12 +287,12 @@ angular.module("pnhs.voting.admin",[])
             })
         };
 
-        $scope.getAllUser = function(){
+        _self.getAllUser = function(){
             generalService.getAllUser({
                 success : function(userList){
                     for(var i = 0 ; i < userList.length;i++){
                         if(userList[i].admin_id != generalService._storageHandler().userId){
-                            $scope.userList.push(userList[i]);
+                            _self.userList.push(userList[i]);
                         } 
                     }
                 },  
@@ -294,13 +300,13 @@ angular.module("pnhs.voting.admin",[])
                     swal("Oops!",error,"error");
                 }
             });
-            return $scope.userList;
+            return _self.userList;
         };
 
         // Watchers
 
-/*        $scope.$watch(function(){
-            return $scope.option;
+/*        _self.$watch(function(){
+            return _self.option;
         },function(newVal,oldVal){
             generalService.setStatusPoll(newVal,{
                 success: function(){
@@ -321,9 +327,9 @@ angular.module("pnhs.voting.admin",[])
                 if(generalService.isLoggedIn) {
                     generalService.getAdminDetails(generalService._storageHandler().userId,{
                         success: function(details){
-                            $scope.adminInfo = details;
-                            $scope.getAllVotes();
-                            $scope.userList = $scope.getAllUser();
+                            _self.adminInfo = details;
+                            _self.getAllVotes();
+                            _self.userList = _self.getAllUser();
                             window.location.href = "#/dashboard";
                             //generalService.redirect('dashboard');
                         },
@@ -334,7 +340,7 @@ angular.module("pnhs.voting.admin",[])
                 }
             }
         });
-}]);
+}    
     
 }());
 

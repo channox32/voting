@@ -1,8 +1,11 @@
 /*global angular*/
+(function(){
 angular.module('VoteApp')
-.service('generalService', ['$http', '$window',
-    function($http, $window) {
-        return {
+.service('generalService', generalService);
+
+    generalService.$inject = ['$http','$window'];
+    function generalService($http,$window){
+        var generalService = {
             isLoggedIn : sessionStorage.userId ? true : false,
 
             redirect : function(page){
@@ -177,7 +180,22 @@ angular.module('VoteApp')
                 }, function(errorLog){
                     callback.error(errorLog);
                 });
+            },
+            studentExists : function(data,callback){
+                $http.post(this.apiRef() + 'studentExists',data)
+                .then(function(response){
+                    if(response.data.result === 'success') {
+                        callback.success();
+                    }else{
+                        callback.error(response.data.result);
+                    }
+                }, function(error){
+                      callback.error(response.data.result);
+                })
             }
         };
+        
+        return generalService;
     }
-]);
+}());
+

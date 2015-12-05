@@ -1,22 +1,22 @@
-<div class="container" data-ng-controller="AdminCtrl">
+<div class="container">
     <div class="jumbotron">
         <div class="row">
             <div class="col-md-6">
                 <ul class="nav nav-tabs">
-                    <li role="presentation" data-ng-class="{active : tab=='basic'}"><a href="javascript:void(0)" data-ng-click="changeTab('basic')">Basic</a></li>
-                    <li role="presentation" data-ng-class="{active : tab=='result' || tab=='all'}" ><a href="javascript:void(0)" data-ng-click="changeTab('result')">Results</a></li>
-                    <li role="presentation" data-ng-class="{active : tab=='additional'}"><a href="javascript:void(0)" data-ng-click="changeTab('additional')">User Accounts</a></li>
-                    <li role="presentation" data-ng-class="{active : tab=='candidate'}"><a href="javascript:void(0)" data-ng-click="changeTab('candidate')">Candidates</a></li>
+                    <li role="presentation" data-ng-class="{active : admin.tab=='basic'}"><a href="javascript:void(0)" data-ng-click="admin.changeTab('basic')">Basic</a></li>
+                    <li role="presentation" data-ng-class="{active : admin.tab=='result' || tab=='all'}" ><a href="javascript:void(0)" data-ng-click="admin.changeTab('result')">Results</a></li>
+                    <li role="presentation" data-ng-class="{active : admin.tab=='additional'}"><a href="javascript:void(0)" data-ng-click="admin.changeTab('additional')">User Accounts</a></li>
+                    <li role="presentation" data-ng-class="{active : admin.tab=='candidate'}"><a href="javascript:void(0)" data-ng-click="changeTab('candidate')">Candidates</a></li>
                 </ul>
             </div>
             <div class="col-md-6">
                 <div class="pull-right">
-                    <h4>Welcome&emsp;{{adminInfo.firstname}}&nbsp;{{adminInfo.lastname}}&emsp;<button class="btn btn-danger btn-sm" data-ng-click="logout()">Logout</button></h4>
+                    <h4>Welcome&emsp;{{admin.adminInfo.firstname}}&nbsp;{{admin.adminInfo.lastname}}&emsp;<button class="btn btn-danger btn-sm" data-ng-click="admin.logout()">Logout</button></h4>
                 </div>
             </div>
         </div>
         <br/>
-        <div data-ng-show="tab=='basic'">
+        <div data-ng-show="admin.tab=='basic'">
             <div class="row">
                 <div class="col-md-10">
                     <div class="panel panel-info">
@@ -32,14 +32,14 @@
                                 <th>Username</th>
                                 <th>Role</th>
                                 <th>Options</th>
-                                <tr data-ng-repeat="users in userList">
+                                <tr data-ng-repeat="users in admin.userList">
                                     <td>{{users.firstname}}</td>
                                     <td>{{users.lastname}}</td>
                                     <td>{{users.username}}</td>
                                     <td>{{(users.role == '1') ? "Administrator" : "Limited"}}</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" data-ng-click="setAdmin(users.admin_id)"><span class="fa fa-lock">&nbsp;</span>Change Password</button>
-                                        <button class="btn btn-danger btn-sm" data-ng-disabled="adminInfo.role=='2'" data-ng-click="deleteUser(users.admin_id)"><span class="fa fa-remove">&nbsp;</span>Delete</button>
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" data-ng-click="admin.setAdmin(users.admin_id)"><span class="fa fa-lock">&nbsp;</span>Change Password</button>
+                                        <button class="btn btn-danger btn-sm" data-ng-disabled="admin.adminInfo.role=='2'" data-ng-click="admin.deleteUser(users.admin_id)"><span class="fa fa-remove">&nbsp;</span>Delete</button>
                                     </td>
                                 </tr>
                             </table>
@@ -60,7 +60,7 @@
                                     <h5>Old Password</h5><br/>
                                 </div>
                                 <div class="col-md-5">
-                                    <input type="password" data-ng-disabled="true" class="form-control" placeholder="*********">
+                                    <input type="password" data-ng-disabled="admin.true" class="form-control" placeholder="*********">
                                 </div>
                             </div>
                             <div class="row">
@@ -68,7 +68,7 @@
                                     <h5>New Password</h5><br/>
                                 </div>
                                 <div class="col-md-5">
-                                    <input type="password" class="form-control" data-ng-model="password">
+                                    <input type="password" class="form-control" data-ng-model="admin.password">
                                 </div>
                             </div>
                                                     <div class="row">
@@ -76,17 +76,17 @@
                                     <h5>Confirm New Password</h5><br/>
                                 </div>
                                 <div class="col-md-5">
-                                    <input type="password" class="form-control" data-ng-model="confirmPass">
+                                    <input type="password" class="form-control" data-ng-model="admin.confirmPass">
                                 </div>
                                 <div class="col-md-3">
-                                    <span style="color:green;"class="fa fa-check" data-ng-show="password==confirmPass&&password!==''&&confirmPass!==''"> Password match!</span>
-                                    <span style="color:red;"class="fa fa-remove" data-ng-show="password!=confirmPass&&password!==''&&confirmPass!==''"> Password does not match!</span>
+                                    <span style="color:green;"class="fa fa-check" data-ng-show="admin.password==confirmPass&&password!==''&&confirmPass!==''"> Password match!</span>
+                                    <span style="color:red;"class="fa fa-remove" data-ng-show="admin.password!=confirmPass&&password!==''&&confirmPass!==''"> Password does not match!</span>
                                 </div>
                             </div>
                             </div>
                             <div class="modal-footer">
                                 <button id="close" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-success" data-ng-click="changePass()">Change Password</button>
+                                <button type="button" class="btn btn-success" data-ng-click="admin.changePass()">Change Password</button>
                             </div>
                         </div>
                     </div>
@@ -96,22 +96,22 @@
                 <div class="col-md-10">
                     <div class="pull-right">
                         <a href="#/add_user">
-                            <button  class="btn btn-info btn-sm" data-ng-disabled="adminInfo.role=='2'"><span class="fa fa-plus"></span> Add User</button>
+                            <button  class="btn btn-info btn-sm" data-ng-disabled="admin.adminInfo.role=='2'"><span class="fa fa-plus"></span> Add User</button>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
-        <div data-ng-show="tab=='result'">
+        <div data-ng-show="admin.tab=='result'">
         <div class="row">
-            <h3 align="center" style="color:red;">Total Number of Votes Consolidated : <span style="font-weight:bolder;color:blue;">{{votes  + ' / '  + students + ' '}}&nbsp;students</span></h3>
+            <h3 align="center" style="color:red;">Total Number of Votes Consolidated : <span style="font-weight:bolder;color:blue;">{{admin.votes }}&nbsp;students</span></h3>
         </div>
             <div class="row">
                 <div class="col-md-2">
                     <b>President</b>
                 </div>
                 <div class="col-md-8" style="border:1px dashed black;">
-                    <div data-ng-repeat="president in candidateList.president">
+                    <div data-ng-repeat="president in admin.candidateList.president">
                         <div >
                             <span>{{president.fullname}}<br/></span>
                         </div>
@@ -129,7 +129,7 @@
                     <b>Vice President</b>
                 </div>
                 <div class="col-md-8" style="border:1px dashed black;">
-                    <div data-ng-repeat="vice in candidateList.vice_president">
+                    <div data-ng-repeat="vice in admin.candidateList.vice_president">
                         <div >
                             <span>{{vice.fullname}}<br/></span>
                         </div>
@@ -148,7 +148,7 @@
                     <b>Secretary</b>
                 </div>
                 <div class="col-md-8" style="border:1px dashed black;">
-                    <div data-ng-repeat="secretary in candidateList.secretary">
+                    <div data-ng-repeat="secretary in admin.candidateList.secretary">
                         <div >
                             <span>{{secretary.fullname}}<br/></span>
                         </div>
@@ -167,7 +167,7 @@
                     <b>Treasurer</b>
                 </div>
                 <div class="col-md-8" style="border:1px dashed black;">
-                    <div data-ng-repeat="treasurer in candidateList.treasurer">
+                    <div data-ng-repeat="treasurer in admin.candidateList.treasurer">
                         <div >
                             <span>{{treasurer.fullname}}<br/></span>
                         </div>
@@ -186,7 +186,7 @@
                     <b>Public Information Officer (PIO)</b>
                 </div>
                 <div class="col-md-8" style="border:1px dashed black;">
-                    <div data-ng-repeat="pio in candidateList.pio">
+                    <div data-ng-repeat="pio in admin.candidateList.pio">
                         <div >
                             <span>{{pio.fullname}}<br/></span>
                         </div>
@@ -205,7 +205,7 @@
                     <b>Auditor</b>
                 </div>
                 <div class="col-md-8" style="border:1px dashed black;">
-                    <div data-ng-repeat="auditor in candidateList.auditor">
+                    <div data-ng-repeat="auditor in admin.candidateList.auditor">
                         <div >
                             <span>{{auditor.fullname}}<br/></span>
                         </div>
@@ -224,7 +224,7 @@
                     <b>Fourth Year Representative</b>
                 </div>
                 <div class="col-md-8" style="border:1px dashed black;">
-                    <div data-ng-repeat="fourth in candidateList.fourth">
+                    <div data-ng-repeat="fourth in admin.candidateList.fourth">
                         <div >
                             <span>{{fourth.fullname}}<br/></span>
                         </div>
@@ -243,7 +243,7 @@
                     <b>Third Year Representative</b>
                 </div>
                 <div class="col-md-8" style="border:1px dashed black;">
-                    <div data-ng-repeat="third in candidateList.third">
+                    <div data-ng-repeat="third in admin.candidateList.third">
                         <div >
                             <span>{{third.fullname}}<br/></span>
                         </div>
@@ -262,7 +262,7 @@
                     <b>Second Year Representative</b>
                 </div>
                 <div class="col-md-8" style="border:1px dashed black;">
-                    <div data-ng-repeat="second in candidateList.second">
+                    <div data-ng-repeat="second in admin.candidateList.second">
                         <div >
                             <span>{{second.fullname}}<br/></span>
                         </div>
@@ -277,7 +277,7 @@
                 </div>
             </div>
         </div>
-        <div data-ng-show="tab=='additional'">
+        <div data-ng-show="admin.tab=='additional'">
              <div class="row">
                  <div class="col-md-12">
                      <div class="panel panel-default">
@@ -292,9 +292,9 @@
                                  <th>Grade/Year</th>
                                  <th>Section</th>
                                  <th>Date Voted</th>
-                                 <tr data-ng-repeat="student in studentList | orderBy:'yearlevel'">
+                                 <tr data-ng-repeat="student in admin.studentList | orderBy:'yearlevel'">
                                      <td data-ng-bind="student.lrn"></td>
-                                     <td>{{student.firstname + " " +student.lastname}}</td>
+                                     <td>{{student.firstname + " " + student.lastname}}</td>
                                      <td data-ng-bind="student.gender"></td>
                                      <td data-ng-bind="student.yearlevel"></td>
                                      <td data-ng-bind="student.section"></td>
@@ -312,7 +312,7 @@
                  </center>
              </div>   
         </div>
-        <div data-ng-show="tab=='candidate'">
+        <div data-ng-show="admin.tab=='candidate'">
             <div class="row">
             <div class="col-md-12">
                 <div class="pull-right">
@@ -332,7 +332,7 @@
                                 <th>Party List</th>
                                 <th>Grade Level</th>
                                 <th>Motto</th>
-                                <tr data-ng-repeat="candidate in candidateArray">
+                                <tr data-ng-repeat="candidate in admin.candidateArray">
                                     <td>{{candidate.fullname}}</td>
                                     <td>{{candidate.position.toUpperCase()}}</td>
                                     <td>{{candidate.party_id}}</td>

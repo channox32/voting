@@ -3,19 +3,24 @@ angular.module("pnhs.voting.student",[])
 .config(function($routeProvider){
     $routeProvider.when('/students',{
         templateUrl : 'modules/students/index.html',
-        controller : 'StudentCtrl'
+        controller : 'StudentCtrl',
+        controllerAs: 'student'
     });
-}).controller('StudentCtrl',['$scope','generalService', function($scope, generalService){
-        $scope.currentPage = generalService.currentPage ? generalService.currentPage : 'registration';
-        $scope.cStep = 1;
-        $scope.lrnCheck = function(){
-            if($scope.studentData.lrn.match(/[A-Za-z]/g) === null){
-                $scope.invalidLRN = false;
+}).controller('StudentCtrl',StudentCtrl);
+    
+StudentCtrl.$inject = ['$scope','$rootScope','generalService'];
+function StudentCtrl($scope,$rootScope, generalService){
+        var _self = this;
+        _self.currentPage = generalService.currentPage ? generalService.currentPage : 'registration';
+        _self.cStep = 1;
+        _self.lrnCheck = function(){
+            if(_self.studentData.lrn.match(/[A-Za-z]/g) === null){
+                _self.invalidLRN = false;
             }else{
-                $scope.invalidLRN = true;
+                _self.invalidLRN = true;
             }
         }
-        $scope.studentData = {
+        _self.studentData = {
             lrn : '',
             firstname : '',
             lastname : '',
@@ -24,12 +29,12 @@ angular.module("pnhs.voting.student",[])
             yearlevel : '7',
             section : 'Ampere'
         };
-        $scope.bdate = {
+        _self.bdate = {
             month : 'January',
             date : '1',
             year: '2000'
         };
-        $scope.monthList = [
+        _self.monthList = [
             { month : 'January'},
             {month : 'February'},
             {month : 'March'},
@@ -44,7 +49,7 @@ angular.module("pnhs.voting.student",[])
             {month : 'December '}
         ];
 
-        $scope.candidateData = {
+        _self.candidateData = {
             president : [],
             vice_president : [],
             secretary : [],
@@ -57,20 +62,20 @@ angular.module("pnhs.voting.student",[])
         };
 
         
-        $scope.candidate = {};
+        _self.candidate = {};
 
-        $scope.candidateInfo = {
+        _self.candidateInfo = {
             'name' : '',
             'year' : '',
             'motto' : ''
         };
-        $scope.sectionList = [];
-        $scope.errorMessage = '';
-        $scope.errorPopup = false;
-        $scope.partyList = [];
-        $scope.members = [];
+        _self.sectionList = [];
+        _self.errorMessage = '';
+        _self.errorPopup = false;
+        _self.partyList = [];
+        _self.members = [];
 
-        $scope.days = function(){
+        _self.days = function(){
             var days = [];
             for(var i = 1; i <= 31; i++){
                 days.push(i);
@@ -78,7 +83,7 @@ angular.module("pnhs.voting.student",[])
             return days;
         }
         
-        $scope.year = function(){
+        _self.year = function(){
             var year = [];
             for(var i = 1990; i < new Date().getFullYear(); i++) {
                 year.push(i);
@@ -86,22 +91,22 @@ angular.module("pnhs.voting.student",[])
             return year;
         };
 
-        $scope.registerStudent = function(){
-            $scope.studentData.birthdate = $scope.bdate.month + $scope.bdate.date + $scope.bdate.year;
-            generalService.studentExists({lrn : $scope.studentData.lrn},{
+        _self.registerStudent = function(){
+            _self.studentData.birthdate = _self.bdate.month + _self.bdate.date + _self.bdate.year;
+            generalService.studentExists({lrn : _self.studentData.lrn},{
                 success : function(){
-                        generalService.registerStudent($scope.studentData,{
+                        generalService.registerStudent(_self.studentData,{
                             success : function(data){
                                 swal("Good job!", "You're account successfully saved!", "success");
-                                $scope.currentPage = 'choose';
-                                generalService._storageHandler().page = $scope.currentPage;
-                                generalService.currentPage = $scope.currentPage;
+                                _self.currentPage = 'choose';
+                                generalService._storageHandler().page = _self.currentPage;
+                                generalService.currentPage = _self.currentPage;
                                 generalService._storageHandler().registerId = data;
-                                $scope.cStep += 32;
+                                _self.cStep += 32;
                             },
                             error : function(error){
-                                $scope.errorMessage = error;
-                                swal("Oops!", "Something went wrong!" + $scope.errorMessage + "," +  "error");
+                                _self.errorMessage = error;
+                                swal("Oops!", "Something went wrong!" + _self.errorMessage + "," +  "error");
                             }
                         });
                 },
@@ -110,27 +115,27 @@ angular.module("pnhs.voting.student",[])
                 }
             })
         };
-        $scope.getPartyInfo = function(id){
-            $scope.options = true;
-            $scope.platform = false;
-            $scope.members = [];
-            for(var i = 0; i < $scope.partyList.length;i++){
-                if($scope.partyList[i].party_id === id){
-                    $scope.partyFlag = $scope.partyList[i];
+        _self.getPartyInfo = function(id){
+            _self.options = true;
+            _self.platform = false;
+            _self.members = [];
+            for(var i = 0; i < _self.partyList.length;i++){
+                if(_self.partyList[i].party_id === id){
+                    _self.partyFlag = _self.partyList[i];
                 }
             }
         }
 
-        $scope.getListMembers = function(){
-            $scope.members = [];
-            $scope.hashes = [];
-                for(var position in $scope.candidateData){
-                    $scope.candidateData[position].forEach(function(entry){
-                            if(entry.party_id === $scope.partyFlag.party_id){
-                                //if($scope.hashes.indexOf(entry.$$hashKey) < 0){
-                                    $scope.members.push(entry);
-                                   // $scope.hashes.push(entry.$$hashKey);
-                                    $scope.candidate[entry.position] = entry.fullname;
+        _self.getListMembers = function(){
+            _self.members = [];
+            _self.hashes = [];
+                for(var position in _self.candidateData){
+                    _self.candidateData[position].forEach(function(entry){
+                            if(entry.party_id === _self.partyFlag.party_id){
+                                //if(_self.hashes.indexOf(entry.$$hashKey) < 0){
+                                    _self.members.push(entry);
+                                   // _self.hashes.push(entry.$$hashKey);
+                                    _self.candidate[entry.position] = entry.fullname;
                                 //}
                             }
                     });
@@ -138,15 +143,15 @@ angular.module("pnhs.voting.student",[])
         }
 
 
-        $scope.vote = function(option) {
-            $scope.currentPage = option;
-            generalService._storageHandler().page = $scope.currentPage;
-            generalService.currentPage = $scope.currentPage;
-            $scope.cStep += 5;
+        _self.vote = function(option) {
+            _self.currentPage = option;
+            generalService._storageHandler().page = _self.currentPage;
+            generalService.currentPage = _self.currentPage;
+            _self.cStep += 5;
             if(option === 'party'){
                 generalService.getAllParties({
                     success : function(data){
-                        $scope.partyList = data.parties;
+                        _self.partyList = data.parties;
                     },
                     error : function(errorLog){
                         swal("Error!",errorlog,"warning");
@@ -158,30 +163,30 @@ angular.module("pnhs.voting.student",[])
                     candidateInfo.forEach(function(entry){
                         switch(entry.position) {
                             case 'president' :
-                                $scope.candidateData.president.push(entry);
+                                _self.candidateData.president.push(entry);
                                 break;
                             case 'vice_president' : 
-                                $scope.candidateData.vice_president.push(entry);
+                                _self.candidateData.vice_president.push(entry);
                                 break;
                             case 'secretary': 
-                                $scope.candidateData.secretary.push(entry);
+                                _self.candidateData.secretary.push(entry);
                                  break;
                             case 'treasurer' :
-                                $scope.candidateData.treasurer.push(entry);
+                                _self.candidateData.treasurer.push(entry);
                             case 'pio':
-                                $scope.candidateData.pio.push(entry);
+                                _self.candidateData.pio.push(entry);
                                 break;
                             case 'auditor':
-                                $scope.candidateData.auditor.push(entry);
+                                _self.candidateData.auditor.push(entry);
                                 break;
                             case 'fourth':
-                                $scope.candidateData.fourth.push(entry);
+                                _self.candidateData.fourth.push(entry);
                                 break;
                             case 'third':
-                                $scope.candidateData.third.push(entry);
+                                _self.candidateData.third.push(entry);
                                 break;
                             case 'second':
-                                $scope.candidateData.second.push(entry);
+                                _self.candidateData.second.push(entry);
                                 break;
                             default :
                                 console.log("Error");
@@ -196,7 +201,7 @@ angular.module("pnhs.voting.student",[])
             });
         };
 
-        $scope.candidateVote = function(){
+        _self.candidateVote = function(){
             swal({
                 title: "Finalize Vote?",
                 text: "You cannot vote again, ensure that this is already final!",
@@ -209,14 +214,14 @@ angular.module("pnhs.voting.student",[])
                 closeOnCancel: true 
                 }, function(isConfirm){ 
                      if (isConfirm) {   
-                            $scope.candidate.voters_id = generalService._storageHandler().registerId; 
-                            generalService.voteCandidates($scope.candidate,{
+                            _self.candidate.voters_id = generalService._storageHandler().registerId; 
+                            generalService.voteCandidates(_self.candidate,{
                                 success : function(response){
                                     if(response.result === 'success'){
-                                        $scope.currentPage = 'finalize';   
-                                        generalService._storageHandler().page = $scope.currentPage;
-                                        generalService.currentPage = $scope.currentPage;
-                                        $scope.cStep += 100 - $scope.cStep;
+                                        _self.currentPage = 'finalize';   
+                                        generalService._storageHandler().page = _self.currentPage;
+                                        generalService.currentPage = _self.currentPage;
+                                        _self.cStep += 100 - _self.cStep;
                                     }
                                 },
                                 error : function(errorLog){
@@ -228,21 +233,21 @@ angular.module("pnhs.voting.student",[])
         };
 
 
-        $scope.getCandidateDetails = function(name,position){
-            for(var i = 0 ; i < $scope.candidateData[position].length;i++){
-                if($scope.candidateData[position][i].fullname === name){
-                    $scope.candidateInfo = $scope.candidateData[position][i];
+        _self.getCandidateDetails = function(name,position){
+            for(var i = 0 ; i < _self.candidateData[position].length;i++){
+                if(_self.candidateData[position][i].fullname === name){
+                    _self.candidateInfo = _self.candidateData[position][i];
                 }
             }
         };
 
-        $scope.why = function(){
+        _self.why = function(){
             swal({title: "Why?",   text: "Some message here!",   imageUrl: "img/question.jpg" });
         };
 
-        $scope.verify = function(){
-            if($scope.passcode){
-                generalService.verification($scope.passcode,{
+        _self.verify = function(){
+            if(_self.passcode){
+                generalService.verification(_self.passcode,{
                     success : function(response){
                         generalService._storageHandler().clear();
                         swal({
@@ -259,7 +264,7 @@ angular.module("pnhs.voting.student",[])
                     },
                     error : function (errorLog){
                         swal('Snap!',errorLog,"error");
-                        $scope.passcode = '';
+                        _self.passcode = '';
                     }
                 })
             }else{
@@ -270,12 +275,12 @@ angular.module("pnhs.voting.student",[])
         // Watchers
 
         $scope.$watch(function(){
-            return $scope.studentData.yearlevel;
+            return _self.studentData.yearlevel;
         },function(newValue,oldValue){
             if(newValue){
                 switch(newValue.toString()){
                     case '7':
-                        $scope.sectionList = [
+                        _self.sectionList = [
                                'Ampere',
                                'Archimedes ',
                                'Aristotle ',
@@ -289,7 +294,7 @@ angular.module("pnhs.voting.student",[])
                         ]; 
                         break;
                     case '8':
-                        $scope.sectionList = [
+                        _self.sectionList = [
                                 'Bernoulli',
                                 'Darwin',
                                 'Fleming',
@@ -303,7 +308,7 @@ angular.module("pnhs.voting.student",[])
                         ];
                         break;
                     case '9':
-                        $scope.sectionList = [
+                        _self.sectionList = [
                             'Copernicus',
                             'Curie',
                             'Dalton',
@@ -320,7 +325,8 @@ angular.module("pnhs.voting.student",[])
                 }
             }
         });
-}]);
+}
+
 }());
 
-
+ 
