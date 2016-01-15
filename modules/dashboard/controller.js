@@ -3,7 +3,8 @@
     .config(function($routeProvider){
         $routeProvider.when('/add_user',{
             templateUrl : 'modules/dashboard/add_user.html',
-            controller: 'UserCtrl'
+            controller: 'UserCtrl',
+            controllerAs : 'user'
         }).when('/dashboard',{
             templateUrl : 'modules/dashboard/index.html',
             controller : 'AdminCtrl',

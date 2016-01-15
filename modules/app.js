@@ -3,6 +3,7 @@
     'use strict';
 angular.module('VoteApp', [
     'ngRoute',
+    'pnhs.voting.directive',
     'pnhs.voting.student',
     'pnhs.voting.admin',
     'pnhs.voting.user',

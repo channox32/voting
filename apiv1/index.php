@@ -36,9 +36,13 @@ $app->post('/studentExists', function() use ($app){
     $data = array('lrn' => $params['lrn']);
 
     if($query= db()->select('student_info','*',$data)){
-        echo json_encode(array('result'=>'success','body'=> $query->count()));
+        if($query->count() > 0) {
+            echo json_encode(array('result'=>'error','message'=> "Existing User!"));
+        }else{
+            echo json_encode(array('result'=>'success','body'=> $query->count()));
+        }
     }else{
-        echo json_encode(array('result'=>'error','message'=> "Test"));
+        echo json_encode(array('result' => 'error', 'message' => "query error"));
     }
 });
 
@@ -119,15 +123,15 @@ $app->post('/voteCandidates', function() use ($app){
     $params = json_decode(getPOSTParams(),true);
     $candidates = array(
         'voters_id' => $params['voters_id'],
-        'president' => $params['president'] || null,
-        'vice_president' => $params['vice_president'] || null,
-        'secretary' => $params['secretary'] || null,
-        'treasurer' => $params['treasurer'] || null,
-        'pio' => $params['pio'] || null,
-        'auditor' => $params['auditor'] || null,
-        'fourth' => $params['fourth'] || null,
-        'third' => $params['third'] || null,
-        'second' => $params['second'] || null
+        'president' => $params['president'],
+        'vice_president' => $params['vice_president'],
+        'secretary' => $params['secretary'],
+        'treasurer' => $params['treasurer'],
+        'pio' => $params['pio'],
+        'auditor' => $params['auditor'],
+        'fourth' => $params['fourth'],
+        'third' => $params['third'],
+        'second' => $params['second']
      );
 
     if($query = db()->create('vote_data',$candidates)){

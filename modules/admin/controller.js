@@ -64,8 +64,7 @@ _self.adminCredential = {};
         _self.page = 1;
 
         _self.changeTab = function(tab){
-            if(tab === 'additional' || tab==='result'){
-                document.getElementById('pagination').innerHTML = '';
+            if(tab === 'additional'){
                 _self.getAllStudents();   
             }
             _self.tab = tab;
@@ -99,6 +98,7 @@ _self.adminCredential = {};
 
 
         _self.loginAdmin = function() {
+            console.log(performance.now());
             swal({title: "Please Wait...",   text: "Checking credential...",   timer: 1000,   showConfirmButton: false });
             if(typeof _self.adminCredential !== 'undefined' || typeof _self.adminCredential === 'object') {
               generalService.loginAdmin(_self.adminCredential,{
@@ -108,7 +108,7 @@ _self.adminCredential = {};
                     generalService._storageHandler().userId = response.admin_id;
                     _self.userList = _self.getAllUser();
                     generalService.redirect('dashboard');
-
+                    console.log(performance.now());
                 },
                 error : function(error) {
                     swal("Oops!", "Incorrect Email or Password! Please Try Again!","error");
@@ -194,17 +194,6 @@ _self.adminCredential = {};
             });
         };
 
-
-        // setInterval(function(){
-        //     for(var position in _self.candidateList){
-        //         for(var i = 0; i < _self.candidateList[position].length;i++){
-        //             _self.candidateList[position][i].votes = 0;
-        //         }
-        //     }
-        //     _self.statistics = [];
-        //     _self.getAllVotes();
-        // },5000);
-
          generalService.getCandidateInfo({
                 success : function(candidateInfo){
                     candidateInfo.forEach(function(entry){
@@ -247,39 +236,21 @@ _self.adminCredential = {};
                 }
         });
 
-        _self.pagination = function(){
-            var availablePage = Math.ceil(_self.studentList.length / 10),paginationControl = $('#pagination');
-            paginationControl.append('<button class="btn btn-default btn-sm" data-ng-disabled="page<=1" data-ng-click="changePage(\'prev\')">Prev</button>&nbsp;')
-            for(var i = 1; i <= availablePage;i++){
-                paginationControl.append('<button class="btn btn-default btn-sm" data-ng-click="changePage('+ i + ')">'+ i +'</button>&nbsp;');    
-            }
-            paginationControl.append('<button class="btn btn-default btn-sm" data-ng-click="changePage(\'next\')">Next</button>')
-        };
-
-        _self.changePage = function(page){
-            // switch(page){
-            //     case 'prev' :
-            //       _self.page--;
-            //       break;
-            //     default :
-            //       console.log(page);
-            //       break;
-            // }
-            alert(page);
-        };
 
         _self.getAllStudents = function(){
             _self.studentList = [];
             generalService.getAllStudents({
                 success: function(list){
-                    _self.students = list.length;
-                    var newDate = new Date();
-                    for(var i = 0 ; i < list.length;i++){
-                       newDate = new Date(list[i].date);
-                       list[i].date = newDate.toDateString() + ' ' + newDate.getHours() + ':' + newDate.getMinutes() + ':' + newDate.getSeconds();
-                       _self.studentList.push(list[i]);
+                    var newDate,
+                    studentsArr     = list.data,
+                    studentLength   = list.data.length;
+
+                    for(var i = 0 ; i < studentLength; i++){
+                       newDate             = new Date(studentsArr[i].date);
+                       studentsArr[i].date = newDate.toDateString() + ' ' + newDate.getHours() + ':' + newDate.getMinutes() + ':' + newDate.getSeconds();
+                       _self.studentList.push(studentsArr[i]);
                     }
-                       _self.pagination();
+                      // _self.pagination();
                 },  
                 error : function(errorLog){
                     swal("Error!", errorLog, "error");

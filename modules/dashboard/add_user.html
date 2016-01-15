@@ -1,14 +1,14 @@
 <div class="container">
-	<div class="jumbotron" data-ng-controller="UserCtrl">
+	<div class="jumbotron">
 		<a href="javascript:void(0)" style="text-decoration:none;"><h3><span class="fa fa-user">&nbsp;</span>User Registration</h3></a>
 		<fieldset>
-			<form data-ng-submit="insertUser()">
+			<form>
 				<table class="table">
 					<tr>
 						<td ><span style="font-size:18px;font-weight:bolder;">Firstname</span></td>
 						<td>
 							<div class="input-group">
-								<input type="text"  required width="100px" class="form-control" data-ng-model="userCredentials.firstname"/>
+								<input type="text"  required width="100px" class="form-control" data-ng-model="user.userCredentials.firstname"/>
 							</div>
 						</td>
 					</tr>
@@ -16,7 +16,7 @@
 						<td ><span style="font-size:18px;font-weight:bolder;">Lastname</span></td>
 						<td>
 							<div class="input-group">
-								<input type="text"  required width="100px" class="form-control" data-ng-model="userCredentials.lastname"/>
+								<input type="text"  required width="100px" class="form-control" data-ng-model="user.userCredentials.lastname"/>
 							</div>
 						</td>
 					</tr>
@@ -24,37 +24,37 @@
 						<td ><span style="font-size:18px;font-weight:bolder;">Password</span></td>
 						<td>
 							<div class="input-group">
-								<input type="password"  required width="100px" data-ng-model="userCredentials.password" class="form-control"/>
+								<input type="password"  required width="100px" data-ng-model="user.userCredentials.password" class="form-control"/>
 							</div>
 							&emsp;
-							<span data-ng-show="userCredentials.password!==''&&userCredentials.password.length>=6" class="fa fa-check-circle" style="color:green;"></span>
-							<span class="fa fa-remove" style="color:red;" data-ng-show="userCredentials.password.length<6&&userCredentials.password!==''"></span>
+							<span data-ng-show="user.userCredentials.password!=='' && user.userCredentials.password.length>=6" class="fa fa-check-circle" style="color:green;"></span>
+							<span class="fa fa-remove" style="color:red;" data-ng-show="user.userCredentials.password.length<6 &&user.userCredentials.password!==''"></span>
 						</td>
 					</tr>
 					<tr>
 						<td ><span style="font-size:18px;font-weight:bolder;">Confirm </span></td>
 						<td>
 							<div class="input-group">
-								<input type="password" required  data-ng-model="userCredentials.confirm" width="100px" class="form-control"/>
+								<input type="password" required  data-ng-model="user.userCredentials.confirm" width="100px" class="form-control"/>
 							</div>
 							&emsp;
-							<span data-ng-show="userCredentials.password===userCredentials.confirm&&userCredentials.confirm!==''"class="fa fa-check-circle" style="color:green;"></span>
-							<span style="color:red;" data-ng-show="userCredentials.password!==userCredentials.confirm&&userCredentials.confirm!==''">Password does not match! </span>
+							<span data-ng-show="user.userCredentials.password===user.userCredentials.confirm && user.userCredentials.confirm!==''"class="fa fa-check-circle" style="color:green;"></span>
+							<span style="color:red;" data-ng-show="user.userCredentials.password!==user.userCredentials.confirm &&user.userCredentials.confirm!==''">Password does not match! </span>
 						</td>
 					</tr>
 					<tr>
 						<td ><span style="font-size:18px;font-weight:bolder;">User Priviledge </span></td>
 						<td>
 							<div class="input-group">
-								Administrative Priviledge <input type="radio" required  data-ng-model="userCredentials.role" name="right" value="1"/>
-								&emsp;Teacher Priviledge <input type="radio" required  data-ng-model="userCredentials.role" name="right" value="2"/>
+								Administrative Priviledge <input type="radio" required  data-ng-model="user.userCredentials.role" name="right" value="1"/>
+								&emsp;Teacher Priviledge <input type="radio" required  data-ng-model="user.userCredentials.role" name="right" value="2"/>
 							</div>
 						</td>
 					</tr>
 					
 					
 				</table>
-				<button type="submit" class="btn btn-success btn-block">Add User</button>
+				<button type="button" data-ng-click="user.insertUser()" class="btn btn-success btn-block">Add User</button>
 			</form>
 		</fieldset>
 	</div>
