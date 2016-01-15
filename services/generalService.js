@@ -19,7 +19,7 @@ angular.module('VoteApp')
             currentPage : sessionStorage.page ? sessionStorage.page : 'registration',
             
             apiRef: function() {
-                return $window.location.origin + window.location.pathname + 'api/';
+                return $window.location.origin + window.location.pathname + 'apiv1/';
             },
             _storageHandler: function() {
                 return sessionStorage;

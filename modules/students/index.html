@@ -202,15 +202,15 @@
                         <div class="panel-body">
                             <table class="table">
                                 <ul class="list-group">
-                                    <li class="list-group-item">President : <span style="color:green;font-weight:bolder"><a href="javascript:void(0)" data-ng-click="student.getCandidateDetails(candidate.president,'president')">{{candidate.president}}</a></span></li>
-                                    <li class="list-group-item">Vice President : <span style="color:green;font-weight:bolder"><a href="javascript:void(0)" data-ng-click="student.getCandidateDetails(candidate.vice_president,'vice_president')">{{candidate.vice_president}}</a></span></li>
-                                    <li class="list-group-item">Secretary : <span style="color:green;font-weight:bolder"><a href="javascript:void(0)" data-ng-click="student.getCandidateDetails(candidate.secretary,'secretary')">{{candidate.secretary}}</a></span></li>
-                                    <li class="list-group-item">Treasurer : <span style="color:green;font-weight:bolder"><a href="javascript:void(0)" data-ng-click="student.getCandidateDetails(candidate.treasurer,'treasurer')">{{candidate.treasurer}}</a></span></li>
-                                    <li class="list-group-item">Public Information Officer : <span style="color:green;font-weight:bolder"><a href="javascript:void(0)" data-ng-click="student.getCandidateDetails(candidate.pio,'pio')">{{candidate.pio}}</a></span></li>
-                                    <li class="list-group-item">Auditor :<span style="color:green;font-weight:bolder"><a href="javascript:void(0)" data-ng-click="student.getCandidateDetails(candidate.auditor,'auditor')">{{candidate.auditor}}</a></span></li>
-                                    <li class="list-group-item">4<sup>rd</sup>-Year Representative : <span style="color:green;font-weight:bolder"><a href="javascript:void(0)" data-ng-click="student.getCandidateDetails(candidate.fourth,'fourth')">{{candidate.fourth}}</a></span><br/></li>
-                                    <li class="list-group-item">3<sup>rd</sup>-Year Representative : <span style="color:green;font-weight:bolder"><a href="javascript:void(0)" data-ng-click="student.getCandidateDetails(candidate.third,'third')">{{candidate.third}}</a></span><br/></li>
-                                    <li class="list-group-item">2<sup>rd</sup>-Year Representative : <span style="color:green;font-weight:bolder"><a href="javascript:void(0)" data-ng-click="student.getCandidateDetails(candidate.second,'second')">{{candidate.second}}</a></span><br/></li>
+                                    <li class="list-group-item">President : <span style="color:green;font-weight:bolder"><a href="javascript:void(0)" data-ng-click="student.getCandidateDetails(student.candidate.president,'president')">{{student.candidate.president}}</a></span></li>
+                                    <li class="list-group-item">Vice President : <span style="color:green;font-weight:bolder"><a href="javascript:void(0)" data-ng-click="student.getCandidateDetails(student.candidate.vice_president,'vice_president')">{{student.candidate.vice_president}}</a></span></li>
+                                    <li class="list-group-item">Secretary : <span style="color:green;font-weight:bolder"><a href="javascript:void(0)" data-ng-click="student.getCandidateDetails(student.candidate.secretary,'secretary')">{{student.candidate.secretary}}</a></span></li>
+                                    <li class="list-group-item">Treasurer : <span style="color:green;font-weight:bolder"><a href="javascript:void(0)" data-ng-click="student.getCandidateDetails(student.candidate.treasurer,'treasurer')">{{student.candidate.treasurer}}</a></span></li>
+                                    <li class="list-group-item">Public Information Officer : <span style="color:green;font-weight:bolder"><a href="javascript:void(0)" data-ng-click="student.getCandidateDetails(student.candidate.pio,'pio')">{{student.candidate.pio}}</a></span></li>
+                                    <li class="list-group-item">Auditor :<span style="color:green;font-weight:bolder"><a href="javascript:void(0)" data-ng-click="student.getCandidateDetails(student.candidate.auditor,'auditor')">{{student.candidate.auditor}}</a></span></li>
+                                    <li class="list-group-item">4<sup>rd</sup>-Year Representative : <span style="color:green;font-weight:bolder"><a href="javascript:void(0)" data-ng-click="student.getCandidateDetails(student.candidate.fourth,'fourth')">{{student.candidate.fourth}}</a></span><br/></li>
+                                    <li class="list-group-item">3<sup>rd</sup>-Year Representative : <span style="color:green;font-weight:bolder"><a href="javascript:void(0)" data-ng-click="student.getCandidateDetails(student.candidate.third,'third')">{{student.candidate.third}}</a></span><br/></li>
+                                    <li class="list-group-item">2<sup>rd</sup>-Year Representative : <span style="color:green;font-weight:bolder"><a href="javascript:void(0)" data-ng-click="student.getCandidateDetails(student.candidate.second,'second')">{{student.candidate.second}}</a></span><br/></li>
                                 </ul>
                             </table>
                         </div>
@@ -285,9 +285,9 @@
                         <div class="panel-body">
                             <div data-ng-show="student.candidateInfo.name !== ''">
                                 <img class="thumbnail" src="img/pnhsLogo.png" width="50px" height="50px"/>
-                                <h5><i class="fa fa-user"></i>&nbsp;Name</h5><span>{{candidateInfo.fullname}}</span>
-                                <h5><i class="fa fa-gear"></i>&nbsp;Grade</h5><span>{{candidateInfo.year}}</span>
-                                <h5><i class="fa fa-quote-left"></i>&nbsp;Motto</h5><span><em>{{candidateInfo.motto}}</em></span>
+                                <h5><i class="fa fa-user"></i>&nbsp;Name</h5><span>{{student.candidateInfo.fullname}}</span>
+                                <h5><i class="fa fa-gear"></i>&nbsp;Grade</h5><span>{{student.candidateInfo.year}}</span>
+                                <h5><i class="fa fa-quote-left"></i>&nbsp;Motto</h5><span><em>{{student.candidateInfo.motto}}</em></span>
                             </div>
                             <div data-ng-show="student.candidateInfo.name ===''">
                                 <span style="color:red;">No Candidate Selected!</span>

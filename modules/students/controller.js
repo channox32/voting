@@ -4,7 +4,7 @@ angular.module("pnhs.voting.student",[])
     $routeProvider.when('/students',{
         templateUrl : 'modules/students/index.html',
         controller : 'StudentCtrl',
-        controllerAs: 'student'
+        controllerAs : 'student'
     });
 }).controller('StudentCtrl',StudentCtrl);
     
@@ -62,7 +62,17 @@ function StudentCtrl($scope,$rootScope, generalService){
         };
 
         
-        _self.candidate = {};
+        _self.candidate = {
+            president : '',
+            vice_president : '',
+            secretary : '',
+            treasurer : '',
+            pio : '',
+            auditor : '',
+            fourth : '',
+            third : '',
+            second : ''
+        };
 
         _self.candidateInfo = {
             'name' : '',
@@ -101,7 +111,7 @@ function StudentCtrl($scope,$rootScope, generalService){
                                 _self.currentPage = 'choose';
                                 generalService._storageHandler().page = _self.currentPage;
                                 generalService.currentPage = _self.currentPage;
-                                generalService._storageHandler().registerId = data;
+                                generalService._storageHandler().registerId = parseInt(data.replace(/"/g,""),10);
                                 _self.cStep += 32;
                             },
                             error : function(error){

@@ -30,7 +30,6 @@ $app->get('/getAllStudents',function() use ($app){
     }
 });
 
-
 $app->post('/studentExists', function() use ($app){
     $params = getPOSTParams();
     $params = json_decode($params,true);
@@ -120,15 +119,15 @@ $app->post('/voteCandidates', function() use ($app){
     $params = json_decode(getPOSTParams(),true);
     $candidates = array(
         'voters_id' => $params['voters_id'],
-        'president' => $params['president'],
-        'vice_president' => $params['vice_president'],
-        'secretary' => $params['secretary'],
-        'treasurer' => $params['treasurer'],
-        'pio' => $params['pio'],
-        'auditor' => $params['auditor'],
-        'fourth' => $params['fourth'],
-        'third' => $params['third'],
-        'second' => $params['second']
+        'president' => $params['president'] || null,
+        'vice_president' => $params['vice_president'] || null,
+        'secretary' => $params['secretary'] || null,
+        'treasurer' => $params['treasurer'] || null,
+        'pio' => $params['pio'] || null,
+        'auditor' => $params['auditor'] || null,
+        'fourth' => $params['fourth'] || null,
+        'third' => $params['third'] || null,
+        'second' => $params['second'] || null
      );
 
     if($query = db()->create('vote_data',$candidates)){
